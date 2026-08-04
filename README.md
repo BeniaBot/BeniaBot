@@ -1,16 +1,14 @@
-## Hi there 👋
+# BeniaBot
 
-<!--
-**BeniaBot/BeniaBot** is a ✨ _special_ ✨ repository because its `README.md` (this file) appears on your GitHub profile.
+Developer. I build things — tools, experiments, games, bots.
+Mostly Windows utilities and web projects.
 
-Here are some ideas to get you started:
+## Projects
 
-- 🔭 I’m currently working on ...
-- 🌱 I’m currently learning ...
-- 👯 I’m looking to collaborate on ...
-- 🤔 I’m looking for help with ...
-- 💬 Ask me about ...
-- 📫 How to reach me: ...
-- 😄 Pronouns: ...
-- ⚡ Fun fact: ...
--->
+- [lavan-haarami](https://github.com/BeniaBot/lavan-haarami) — AI chatbot site
+- - [Csharf](https://github.com/BeniaBot/Csharf) — Windows tweaks toolkit
+  - - [not-free](https://github.com/BeniaBot/not-free) — web experiment
+   
+    - ## Find me
+   
+    - - [מתמחים טופ](https://mitmachim.top/user/בנימין-מחשבים)
