@@ -16,6 +16,7 @@
 * **[Csharf](https://github.com/BeniaBot/Csharf)** – כלי טוויקים ותחזוקה ל-Windows בקובץ יחיד.
 * **[טיקניק](https://github.com/BeniaBot/tiknick)** – ניהול ומעקב אחר ניקים בפורומים (הכול נשמר מקומית במחשב).
 * **[חנות אפליקציות אופליין](https://github.com/BeniaBot/winapps-offline)** – קטלוג מתקינים מלאים למחשב מנותק · [לקטלוג](https://beniabot.github.io/winapps-offline/)
+* **[שיבוץ חדרים לפנימייה](https://github.com/BeniaBot/wolf-sheep-cabbage)** – 150 בחורים, עשרות חדרים, וכללים של מי לא ישן עם מי. לחיצה אחת משבצת את כולם ומדפיסה את דף הקומה · [לתוכנה](https://beniabot.github.io/wolf-sheep-cabbage/)
 
 בונה גם אתרים ודפי נחיתה. רובם ללקוחות, ולכן לא כאן.
 
@@ -72,6 +73,7 @@ Written from scratch, with stubborn perfectionism and no compromises:
 * **[Csharf](https://github.com/BeniaBot/Csharf)** – Windows tweaking and maintenance in a single file.
 * **[Tik-Nick](https://github.com/BeniaBot/tiknick)** – tracking forum usernames (everything stays on your own machine).
 * **[Offline App Store](https://github.com/BeniaBot/winapps-offline)** – a catalog of full installers for disconnected machines · [catalog](https://beniabot.github.io/winapps-offline/)
+* **[Dorm Room Planner](https://github.com/BeniaBot/wolf-sheep-cabbage)** – 150 boys, dozens of rooms, and rules about who must not share one. One click seats everyone and prints the floor sheet · [open it](https://beniabot.github.io/wolf-sheep-cabbage/)
 
 I also build websites and landing pages. Most are client work, so they are not here.
 
