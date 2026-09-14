@@ -123,6 +123,6 @@ That is precisely what makes it a teacher: you are forced to understand the rout
 
 **Find me:** [mitmachim.top](https://mitmachim.top/user/בנימין-מחשבים)
 
-<sub>✍️ Wording of this page: Claude Opus 5. Tone, content and editing: mine. Yes, this counts as vibe coding too.</sub>
+<sub>✍️ Wording of this page: Claude Opus 5. Tone and content: its attempt to imitate me. Yes, this counts as vibe coding too.</sub>
 
 </details>
