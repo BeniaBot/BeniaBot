@@ -26,11 +26,19 @@
 
 ציניות היא רכיב בסיסי בבני-ברקי הממוצע. מי שזה לא מצחיק אותו – כנראה פשוט לא משלנו.
 
-* **[לבן הארמי](https://github.com/BeniaBot/lavan-haarami)** – AI מקומי פורץ דרך. 97.4 טריליון פרמטרים, רץ בלי GPU ובלי קשר למציאות. התשובה ל"אברהם העברי" – מי שלא מכיר אותו, חצי מהבדיחה הולכת לאיבוד · [להתרשמות](https://beniabot.github.io/lavan-haarami/)
-* **[היומן של תום רידל](https://github.com/BeniaBot/Tom-Riddles-Diary)** – צ'אט ואיקס-עיגול בלתי מנוצח בתוך קובץ Word (בלי מאקרו, 1,120 מצבי לוח ממופים).
 * **[not-free](https://github.com/BeniaBot/not-free)** – עוקף סינון שלא עוקף כלום.
 * **[2049](https://github.com/BeniaBot/2049)** – המשחק המוכר, בתוספת מקשי עזרה נסתרים · [לשחק](https://beniabot.github.io/2049/)
 * **[חוסמים או מפנים](https://github.com/BeniaBot/hosmim-o-mefanim)** – סימולטור הפגנות דו-צדדי בתלת-ממד (גרסה נגזרת; הקרדיט המלא ליוצר המקורי במאגר).
+
+---
+
+### 🧠 AI: Absent Intelligence
+
+כולם מדברים איתך. אף אחד לא בבית.
+
+* **[אלייזה](https://github.com/BeniaBot/eliza)** – ב-1966 אנשים סיפרו לה סודות, ובפנים היו רק כמה עשרות כללים שאדם כתב ביד. משוחזרת לווינדוס וזהה תו בתו לשיחות המקוריות, עם תסריט עברי מקורי ושי-בוטים על אותו מנוע · [להורדה](https://github.com/BeniaBot/eliza/releases/latest)
+* **[לבן הארמי](https://github.com/BeniaBot/lavan-haarami)** – AI מקומי פורץ דרך. 97.4 טריליון פרמטרים, רץ בלי GPU ובלי קשר למציאות. התשובה ל"אברהם העברי" – מי שלא מכיר אותו, חצי מהבדיחה הולכת לאיבוד · [להתרשמות](https://beniabot.github.io/lavan-haarami/)
+* **[היומן של תום רידל](https://github.com/BeniaBot/Tom-Riddles-Diary)** – צ'אט ואיקס-עיגול בלתי מנוצח בתוך קובץ Word (בלי מאקרו, 1,120 מצבי לוח ממופים).
 
 ---
 
@@ -83,11 +91,19 @@ I also build websites and landing pages. Most are client work, so they are not h
 
 Cynicism is a standard component of the average Bnei Brak resident. If it doesn't make you laugh – you're probably not one of us.
 
-* **[Lavan Haarami](https://github.com/BeniaBot/lavan-haarami)** – groundbreaking local AI. 97.4 trillion parameters, runs without a GPU and without any connection to reality. It answers a Hebrew product called "Avraham HaIvri" – miss that reference and half the joke is gone · [see for yourself](https://beniabot.github.io/lavan-haarami/)
-* **[Tom Riddle's Diary](https://github.com/BeniaBot/Tom-Riddles-Diary)** – a chatbot and an unbeatable tic-tac-toe game, both running inside a Word document (no macros, all 1,120 board states pre-mapped).
 * **[not-free](https://github.com/BeniaBot/not-free)** – a filter-bypass tool that bypasses nothing.
 * **[2049](https://github.com/BeniaBot/2049)** – the game you know, plus hidden helper keys · [play](https://beniabot.github.io/2049/)
 * **[Hosmim o Mefanim](https://github.com/BeniaBot/hosmim-o-mefanim)** – a two-sided 3D protest simulator (derivative work; full credit to the original author in the repo).
+
+---
+
+### 🧠 AI: Absent Intelligence
+
+They all talk to you. Nobody's home.
+
+* **[ELIZA](https://github.com/BeniaBot/eliza)** – in 1966 people told her their secrets, and inside there were only a few dozen rules a person wrote by hand. Rebuilt for Windows to match the original transcripts character for character, with an original Hebrew script and more bots on the same engine · [download](https://github.com/BeniaBot/eliza/releases/latest)
+* **[Lavan Haarami](https://github.com/BeniaBot/lavan-haarami)** – groundbreaking local AI. 97.4 trillion parameters, runs without a GPU and without any connection to reality. It answers a Hebrew product called "Avraham HaIvri" – miss that reference and half the joke is gone · [see for yourself](https://beniabot.github.io/lavan-haarami/)
+* **[Tom Riddle's Diary](https://github.com/BeniaBot/Tom-Riddles-Diary)** – a chatbot and an unbeatable tic-tac-toe game, both running inside a Word document (no macros, all 1,120 board states pre-mapped).
 
 ---
 
