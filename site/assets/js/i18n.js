@@ -99,8 +99,7 @@
 
     'foot.made': 'This page too: vibe coded.',
     'foot.find': 'Find me',
-    'foot.mm': 'mitmachim.top',
-    'foot.design': 'How this page is built'
+    'foot.mm': 'mitmachim.top'
   };
 
   var META = {
