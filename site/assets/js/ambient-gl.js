@@ -165,33 +165,54 @@ function start() {
     return opening * (1 - 0.8 * outroNow());
   }
 
+  // The backdrop runs on its own clock, which only advances while frames are
+  // drawn, so a pause never ends in a jump.
+  let clock = 8000;
+  let lastDraw = performance.now();
+
   function draw(now) {
-    // Ease toward the wing in view (set on <html data-active> by main.js).
+    const dt = Math.min(now - lastDraw, 100);
+    clock += dt;
+    lastDraw = now;
+    // Ease toward the wing in view (set on <html data-active> by main.js), by
+    // time rather than by frame, so it takes the same second at any frame rate.
     const target = ACCENTS[root.getAttribute('data-active')] || ACCENTS.tools;
-    for (let i = 0; i < 3; i++) accent[i] += (target[i] - accent[i]) * 0.06;
+    const k = 1 - Math.exp(-dt / 350);
+    for (let i = 0; i < 3; i++) accent[i] += (target[i] - accent[i]) * k;
     program.uniforms.uDim.value = dimNow();
     flowmap.mouse.copy(mouse);
     flowmap.velocity.lerp(velocity, velocity.len() ? 0.5 : 0.1);
     velocity.multiply(0.9);
     flowmap.update();
-    program.uniforms.uTime.value = (now - t0) / 1000;
+    program.uniforms.uTime.value = clock / 1000;
     renderer.render({ scene: mesh });
   }
 
-  const t0 = performance.now() - 8000;
   let running = false;
   let lastFrame = 0;
+  let lastActive = performance.now();
 
-  // Full speed in the opening; under the content the motion is slow and dim,
-  // so a lower frame rate looks the same and saves battery.
+  function bright() {
+    return window.scrollY < hero.offsetHeight * 0.85 || outroNow() > 0.3;
+  }
+
+  // Full speed in the opening and at the close. Under the content the motion is
+  // slow and dim: a lower frame rate looks the same, and while the reader is
+  // just reading (no scroll, no pointer) the picture rests completely, so the
+  // graphics chip and the battery rest too.
   function frameBudget() {
-    const bright = window.scrollY < hero.offsetHeight * 0.85 || outroNow() > 0.3;
-    if (bright) return light ? 1000 / 30 : 0;
+    if (bright()) return light ? 1000 / 30 : 0;
     return light ? 1000 / 12 : 1000 / 24;
+  }
+
+  function settled() {
+    const target = ACCENTS[root.getAttribute('data-active')] || ACCENTS.tools;
+    return Math.abs(target[0] - accent[0]) + Math.abs(target[1] - accent[1]) + Math.abs(target[2] - accent[2]) < 0.01;
   }
 
   function frame(now) {
     if (document.hidden) { running = false; return; }
+    if (!bright() && now - lastActive > 2500 && settled()) { running = false; return; }
     requestAnimationFrame(frame);
     if (now - lastFrame < frameBudget()) return;
     lastFrame = now;
@@ -201,7 +222,13 @@ function start() {
   function run() {
     if (running) return;
     running = true;
+    lastDraw = performance.now();
     requestAnimationFrame(frame);
+  }
+
+  function wake() {
+    lastActive = performance.now();
+    if (!reduceMotion && !document.hidden) run();
   }
 
   draw(performance.now());
@@ -213,12 +240,16 @@ function start() {
     const still = () => {
       queued = false;
       for (let i = 0; i < 3; i++) accent[i] = (ACCENTS[root.getAttribute('data-active')] || ACCENTS.tools)[i];
-      draw(t0 + 8000);
+      lastDraw = performance.now();
+      draw(lastDraw);
     };
     window.addEventListener('scroll', () => { if (!queued) { queued = true; requestAnimationFrame(still); } }, { passive: true });
     return;
   }
 
+  window.addEventListener('scroll', wake, { passive: true });
+  window.addEventListener('pointermove', wake, { passive: true });
+  window.addEventListener('resize', wake);
   document.addEventListener('visibilitychange', () => { if (!document.hidden) run(); });
   run();
 }
