@@ -28,6 +28,17 @@ jobs:
     steps:
       - uses: actions/checkout@v5
       - uses: actions/configure-pages@v5
+      # Pages caches every file for 10 minutes. Without a version in the URLs a
+      # returning visitor can get the new HTML with the old CSS/JS (or the
+      # reverse) right after a deploy. Stamp each local CSS/JS link with the
+      # commit; fonts are left alone so their preloads keep matching.
+      - name: Version asset URLs
+        run: |
+          v="${GITHUB_SHA::8}"
+          sed -i -E "s#(href|src)=\"((assets|vendor)/[^\"?]+\.(css|js|mjs))\"#\1=\"\2?v=$v\"#g" site/index.html
+          sed -i -E "s#from '(\.\./\.\./vendor/ogl/ogl\.min\.mjs)'#from '\1?v=$v'#" site/assets/js/ambient-gl.js
+          grep -q "style.css?v=$v" site/index.html
+          grep -q "ogl.min.mjs?v=$v" site/assets/js/ambient-gl.js
       - uses: actions/upload-pages-artifact@v4
         with:
           path: site
