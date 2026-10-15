@@ -28,6 +28,8 @@
     try {
       initMotion();
       clearTimeout(window.__bbFailsafe);
+      // i18n.js lifts this itself; if it never loaded, the page must still show.
+      root.classList.remove('i18n-wait');
       root.classList.add('anim-ok');
     } catch (err) {
       console.error(err);
@@ -140,7 +142,8 @@
     document.addEventListener('bb:lang', function () {
       splits.forEach(function (s) { s.build(); });
       setCursorText();
-      ScrollTrigger.refresh();
+      // After the new text has painted, so the switch itself stays one quick frame.
+      requestAnimationFrame(function () { ScrollTrigger.refresh(); });
     });
 
     if (document.fonts && document.fonts.ready) {
@@ -210,9 +213,16 @@
         hero.split = null;
       }
     };
-    var tl = gsap.timeline({ delay: 0.1 });
-    tl.add(hero.build(true), 0);
-    tl.fromTo(items, { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.9, ease: 'power3.out', stagger: 0.09 }, 0.35);
+    // On a slow connection the visitor has already waited; show the opening
+    // as it is instead of making them wait through an intro as well.
+    if (performance.now() > 2500) {
+      hero.build(false);
+      gsap.set(items, { opacity: 1 });
+    } else {
+      var tl = gsap.timeline({ delay: 0.1 });
+      tl.add(hero.build(true), 0);
+      tl.fromTo(items, { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.9, ease: 'power3.out', stagger: 0.09 }, 0.35);
+    }
     splits.push({ build: function () { hero.build(false); }, destroy: hero.destroy });
   }
 

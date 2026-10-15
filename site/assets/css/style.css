@@ -320,7 +320,7 @@ button { font: inherit; color: inherit; }
   line-height: 1.25;
   text-wrap: balance;
 }
-@media (min-width: 640px) { .intro-text bdi, .wi-name bdi { white-space: nowrap; } }
+@media (min-width: 640px) { .intro-text bdi, .wi-name bdi, .hl { white-space: nowrap; } }
 .wing-index { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--gap); margin-top: 48px; }
 .wi {
   display: flex;
@@ -346,7 +346,6 @@ button { font: inherit; color: inherit; }
 
 .hl {
   color: var(--accent);
-  white-space: nowrap;
   background: linear-gradient(currentColor 0 0) 0 100% / 0% .07em no-repeat;
   transition: background-size 1s var(--ease) .2s;
 }
@@ -585,6 +584,8 @@ button { font: inherit; color: inherit; }
 .term-bar .win i:first-child { height: 0; border-width: 1.5px 0 0; align-self: center; }
 .term-body { padding: 10px 13px 12px; background: #0c0c10; font-size: .82rem; line-height: 1.8; }
 .t-line { display: flex; align-items: center; gap: 10px; color: var(--muted); white-space: nowrap; }
+/* On a very narrow phone a long menu line ends in an ellipsis, like a real terminal window would cut it. */
+.t-line > span[data-i18n] { min-width: 0; overflow: hidden; text-overflow: ellipsis; }
 .t-k { color: var(--accent); font: 600 .75rem/1 var(--mono); min-width: 1ch; }
 .t-ok { color: var(--text); }
 .caret { display: inline-block; width: .5em; height: 1em; margin-inline-start: 3px; background: var(--accent); vertical-align: -.12em; animation: blink 1.05s steps(1) infinite; }
@@ -901,3 +902,5 @@ button { font: inherit; color: inherit; }
 [tabindex="-1"]:focus { outline: none; }
 /* If the motion layer gives up, nothing may stay unclickable. */
 .no-anim [data-reveal] { pointer-events: auto !important; }
+/* The language button only appears once the script that runs it has loaded. */
+html:not(.i18n-on) [data-lang-toggle] { visibility: hidden; }

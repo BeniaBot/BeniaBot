@@ -7,8 +7,12 @@ import { Renderer, Program, Mesh, Triangle, Flowmap, Vec2 } from '../../vendor/o
 const canvas = document.querySelector('[data-ambient-gl]');
 const hero = document.querySelector('.hero');
 
+// Creating the GL context can take a moment on a weak machine, so it waits
+// until the opening has started moving; the CSS gradient covers until then.
 if (canvas && hero) {
-  try { start(); } catch (err) { console.warn('background off:', err); }
+  const boot = () => { try { start(); } catch (err) { console.warn('background off:', err); } };
+  if ('requestIdleCallback' in window) requestIdleCallback(boot, { timeout: 1200 });
+  else setTimeout(boot, 300);
 }
 
 function start() {
@@ -151,16 +155,28 @@ function start() {
   // Bright in the opening, low under the content, and bright again at the
   // closing line, so the page opens and ends on the same colours.
   const outro = document.querySelector('[data-outro]');
+  // Positions are measured only when the layout changes, never per frame:
+  // reading layout inside the frame loop would force the browser to recompute it.
+  let heroH = window.innerHeight;
+  let outroTop = 0;
+  function measure() {
+    heroH = hero.offsetHeight || window.innerHeight;
+    outroTop = outro ? outro.getBoundingClientRect().top + window.scrollY : 0;
+  }
+  measure();
+  if ('ResizeObserver' in window) new ResizeObserver(measure).observe(document.body);
+  else window.addEventListener('resize', measure);
+
   function outroNow() {
     if (!outro) return 0;
-    const top = outro.getBoundingClientRect().top;
+    const top = outroTop - window.scrollY;
     const vh = window.innerHeight;
     // Starts only once the closing line reaches the middle of the screen, so
     // the text just above it never sits on a bright patch.
     return Math.min(1, Math.max(0, (vh * 0.55 - top) / (vh * 0.45)));
   }
   function dimNow() {
-    const h = hero.offsetHeight || window.innerHeight;
+    const h = heroH;
     const opening = Math.min(1, Math.max(0, (window.scrollY - h * 0.15) / (h * 0.7)));
     return opening * (1 - 0.8 * outroNow());
   }
@@ -193,7 +209,7 @@ function start() {
   let lastActive = performance.now();
 
   function bright() {
-    return window.scrollY < hero.offsetHeight * 0.85 || outroNow() > 0.3;
+    return window.scrollY < heroH * 0.85 || outroNow() > 0.3;
   }
 
   // Full speed in the opening and at the close. Under the content the motion is
@@ -201,7 +217,8 @@ function start() {
   // just reading (no scroll, no pointer) the picture rests completely, so the
   // graphics chip and the battery rest too.
   function frameBudget() {
-    if (bright()) return light ? 1000 / 30 : 0;
+    // At most 60 a second, also on 120 and 144 Hz screens.
+    if (bright()) return light ? 1000 / 30 : 1000 / 60 - 1;
     return light ? 1000 / 12 : 1000 / 24;
   }
 

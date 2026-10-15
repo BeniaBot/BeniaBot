@@ -17,13 +17,13 @@
 <meta property="og:image:height" content="630">
 <meta property="og:locale" content="he_IL">
 <meta property="og:locale:alternate" content="en_US">
+<meta property="og:site_name" content="BeniaBot">
+<meta property="og:image:alt" content="בני הבוט: כלים לווינדוס, אתרים ודפי נחיתה, עברית מלאה, Offline-First">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
 <link rel="preload" href="vendor/fonts/rubik-hebrew-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="vendor/fonts/rubik-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="vendor/lenis/lenis.css">
-<link rel="stylesheet" href="vendor/mouse-follower/mouse-follower.min.css">
-<link rel="stylesheet" href="assets/css/style.css">
 <script>
   // Runs before first paint: language, and a failsafe that reveals everything
   // if the animation script never reports in.
@@ -36,6 +36,9 @@
     window.__bbFailsafe = setTimeout(function () { d.classList.add('no-anim'); d.classList.remove('i18n-wait'); }, 4000);
   })();
 </script>
+<link rel="stylesheet" href="vendor/lenis/lenis.css">
+<link rel="stylesheet" href="vendor/mouse-follower/mouse-follower.min.css">
+<link rel="stylesheet" href="assets/css/style.css">
 </head>
 <body>
 
@@ -499,13 +502,13 @@
   </div>
 </footer>
 
+<script src="assets/js/i18n.js" defer></script>
 <script src="vendor/gsap/gsap.min.js" defer></script>
 <script src="vendor/gsap/ScrollTrigger.min.js" defer></script>
 <script src="vendor/gsap/SplitText.min.js" defer></script>
 <script src="vendor/gsap/ScrambleTextPlugin.min.js" defer></script>
 <script src="vendor/lenis/lenis.min.js" defer></script>
 <script src="vendor/mouse-follower/mouse-follower.min.js" defer></script>
-<script src="assets/js/i18n.js" defer></script>
 <script src="assets/js/main.js" defer></script>
 <script src="assets/js/ambient-gl.js" type="module"></script>
 </body>
