@@ -654,12 +654,29 @@ button { font: inherit; color: inherit; }
 .mb-bar { display: flex; align-items: center; gap: 6px; padding: 7px 10px; background: #1c1c24; }
 .mb-bar > i { width: 7px; height: 7px; border-radius: 50%; background: var(--line-2); }
 .mb-url { margin-inline-start: 8px; padding: 2px 10px; border-radius: 999px; background: rgb(255 255 255 / .05); color: var(--dim); font: 500 .62rem/1.4 var(--mono); }
-.mb-body { display: grid; gap: 7px; padding: 14px 13px; }
-.mb-h { width: 58%; height: 12px; border-radius: 4px; background: var(--text); opacity: .85; }
-.mb-l { width: 86%; height: 6px; border-radius: 3px; background: var(--line-2); }
-.mb-l.short { width: 50%; }
-.mb-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; margin-top: 5px; }
-.mb-grid i { height: 26px; border-radius: 6px; background: linear-gradient(135deg, color-mix(in oklab, var(--accent) 55%, transparent), rgb(164 147 255 / .35)); }
+.mb-body { display: grid; gap: 8px; padding: 9px; }
+/* A miniature of this page's own opening: the same colours, the name, two buttons. */
+.mb-hero {
+  display: grid;
+  justify-items: center;
+  gap: 7px;
+  padding: 18px 10px 14px;
+  border-radius: 6px;
+  background:
+    radial-gradient(55% 75% at 72% 28%, rgb(96 66 214 / .62), transparent 72%),
+    radial-gradient(45% 70% at 18% 92%, rgb(255 168 72 / .38), transparent 70%),
+    #0b0b10;
+}
+.mb-hero b { color: var(--text); font-size: 1.55rem; font-weight: 800; line-height: 1; letter-spacing: -.02em; white-space: nowrap; }
+.mb-tags, .mb-cta { display: flex; gap: 5px; }
+.mb-tags i { width: 30px; height: 4px; border-radius: 2px; background: rgb(255 255 255 / .55); }
+.mb-cta { margin-top: 2px; }
+.mb-cta i { width: 40px; height: 11px; border-radius: 999px; border: 1px solid rgb(255 255 255 / .35); }
+.mb-cta i:first-child { background: var(--text); border-color: var(--text); }
+.mb-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
+.mb-grid i { height: 30px; border-radius: 5px; border: 1px solid var(--line); background: linear-gradient(var(--c, var(--c-tools)) 0 0) 0 0 / 100% 3px no-repeat, #15151b; }
+.mb-grid i:nth-child(2) { --c: var(--c-cynic); }
+.mb-grid i:nth-child(3) { --c: var(--c-ai); }
 
 /* not-free: the bypass that never bypasses */
 .bp { width: 76%; }
