@@ -202,19 +202,26 @@
     };
     var tl = gsap.timeline({ delay: 0.1 });
     tl.add(hero.build(true), 0);
-    tl.fromTo(items, { autoAlpha: 0, y: 20 }, { autoAlpha: 1, y: 0, duration: 0.9, ease: 'power3.out', stagger: 0.09 }, 0.35);
+    tl.fromTo(items, { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.9, ease: 'power3.out', stagger: 0.09 }, 0.35);
     splits.push({ build: function () { hero.build(false); }, destroy: hero.destroy });
   }
 
   function reveals() {
     var els = $$('[data-reveal]');
-    gsap.set(els, { autoAlpha: 0, y: 28 });
+    // Opacity only, never visibility: what is still waiting to rise must stay
+    // reachable by Tab and by screen readers.
+    gsap.set(els, { opacity: 0, y: 28 });
     ScrollTrigger.batch(els, {
       start: 'top 90%',
       once: true,
       onEnter: function (batch) {
-        gsap.to(batch, { autoAlpha: 1, y: 0, duration: 0.9, ease: 'power3.out', stagger: 0.08, overwrite: true });
+        gsap.to(batch, { opacity: 1, y: 0, duration: 0.9, ease: 'power3.out', stagger: 0.08, overwrite: true });
       }
+    });
+    // Tabbing into something that has not risen yet shows it at once.
+    document.addEventListener('focusin', function (e) {
+      var el = e.target.closest && e.target.closest('[data-reveal]');
+      if (el && parseFloat(getComputedStyle(el).opacity) < 1) gsap.to(el, { opacity: 1, y: 0, duration: 0.3, overwrite: true });
     });
   }
 
@@ -248,7 +255,8 @@
   function scrubWords(el) {
     var api = { split: null, tween: null };
     api.build = function () {
-      api.split = SplitText.create(el, { type: 'words', wordsClass: 'w' });
+      // aria 'none': the words stay real text, so a screen reader still reads the paragraph.
+      api.split = SplitText.create(el, { type: 'words', wordsClass: 'w', aria: 'none' });
       api.tween = gsap.fromTo(api.split.words, { opacity: 0.28 }, {
         opacity: 1,
         ease: 'none',

@@ -376,7 +376,8 @@ button { font: inherit; color: inherit; }
 .grid > .card { grid-column: span 2; }
 .grid > .card:last-child:nth-child(3n + 1) { grid-column: 3 / span 2; }
 
-.card { position: relative; display: flex; min-width: 0; transition: opacity .35s; }
+/* The reveal animates .card's opacity, so the hover dim lives on .card-inner. */
+.card { position: relative; display: flex; min-width: 0; }
 .card-inner {
   --mx: 50%;
   --my: 0%;
@@ -389,7 +390,7 @@ button { font: inherit; color: inherit; }
   background: linear-gradient(180deg, #16161d, #111117);
   box-shadow: inset 0 1px 0 rgb(255 255 255 / .05);
   isolation: isolate;
-  transition: border-color .35s, box-shadow .45s;
+  transition: border-color .35s, box-shadow .45s, opacity .35s;
 }
 /* Light that follows the pointer, inside and on the border. */
 .card-inner::before, .card-inner::after {
@@ -452,11 +453,6 @@ button { font: inherit; color: inherit; }
   color: var(--muted);
   font-size: var(--fs-sm);
   line-height: 1.55;
-  display: -webkit-box;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 3;
-  line-clamp: 3;
-  overflow: hidden;
   text-wrap: pretty;
 }
 .card-desc bdi { white-space: nowrap; }
@@ -516,9 +512,9 @@ button { font: inherit; color: inherit; }
   html:not(.tilt-on) .card:hover .media-shot, html:not(.tilt-on) .card:hover .art { transform: scale(1.05); }
   html.tilt-on .media > * { transition: none; }
   .card:hover .pill-quiet { color: var(--text); border-color: var(--text); }
-  .grid:has(.card:hover) .card:not(:hover) { opacity: .62; }
+  .grid:has(.card:hover) .card:not(:hover) .card-inner { opacity: .62; }
   html:not(.tilt-on) .card:hover .card-inner { transform: translateY(-6px) scale(1.025); }
-  html:not(.tilt-on) .card-inner { transition: transform .5s var(--spring), border-color .35s, box-shadow .45s; }
+  html:not(.tilt-on) .card-inner { transition: transform .5s var(--spring), border-color .35s, box-shadow .45s, opacity .35s; }
   .card { z-index: 0; }
   .card:hover { z-index: 2; }
 }
