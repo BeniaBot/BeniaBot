@@ -5,7 +5,7 @@
 
   var EN = {
     'skip': 'Skip to the work',
-    'nav.label': 'Sections',
+    'nav.label': 'Page sections',
     'nav.tools': 'Tools',
     'nav.cynic': 'Cynical wing',
     'nav.vibe': 'Vibe coding',
@@ -15,54 +15,51 @@
     'hero.c2': 'Websites & landing pages',
     'hero.c3': 'Hebrew-first',
     'hero.c4': 'Offline-first',
-    'hero.quote': 'If it needs a network connection, a complicated setup, or an English-only interface – it’s probably not here.',
+    'hero.quote': 'If it needs a network connection, a complicated setup, or an <span class="nw">English-only</span> interface – it’s probably not here.',
     'hero.cta': 'See the work',
 
-    'mq.1': 'No install',
-    'mq.2': 'No internet',
-    'mq.3': 'Hebrew-first',
-    'mq.4': 'One file',
-    'mq.5': 'Offline-first',
-    'mq.6': 'Vibe coded',
-
     'intro.eyebrow': 'Three wings',
-    'intro.text': 'The real tools, the cynical wing, and AI: Absent Intelligence. <span class="hl" data-annotate="underline">Kept apart on purpose</span>, so no joke misleads you about the standard of the work.',
+    'intro.text': 'The real tools, the cynical wing and <bdi>AI: Absent Intelligence</bdi> are <span class="hl">kept apart on purpose</span>, so no joke misleads you about the standard of the work.',
 
     'tools.title': 'Real tools',
     'tools.sub': 'Written from scratch, with stubborn perfectionism and no compromises.',
-    'subtext.alt': 'The main screen: subtitle list, live preview and the timeline',
-    'subtext.name': 'Subtitle Studio',
+    'act.code': 'Code',
+    'subtext.name': 'Subtext',
+    'subtext.alt': '',
     'subtext.desc': 'A full subtitle editor for Windows. Zero installs, zero internet, proper Hebrew.',
     'winapps.name': 'Offline App Store',
     'winapps.desc': 'A catalog of full installers for disconnected machines. One installer, one USB stick, done.',
     'act.catalog': 'Catalog',
+    'pill.winapps': 'Open the Offline App Store catalog',
     'wsc.name': 'Dorm Room Planner',
     'wsc.desc': '150 boys, dozens of rooms, and rules about who must not share one. One click seats everyone and prints the floor sheet.',
     'act.open': 'Open it',
+    'pill.wsc': 'Open the Dorm Room Planner',
     'cs.l1': 'High performance mode',
-    'cs.l2': 'Free up space, clean up',
+    'cs.l2': 'Free up space & clean up the system',
     'cs.l3': 'Repair system files',
     'cs.ok': 'Done. Back to the menu',
     'cs.desc': 'Windows tweaking and maintenance in a single file.',
     'tk.local': 'Local',
     'tk.name': 'Tik-Nick',
-    'tk.desc': 'Tracking forum usernames. Everything stays on your own machine.',
-    'web.name': 'Websites & landing pages',
-    'web.desc': 'I also build websites and landing pages. Most are client work, so they are not here. <strong>This one is.</strong>',
-    'ov.desc': 'An OpenVPN package for Windows, scripts only: tun with AES-256-GCM and tls-crypt, a management interface on a dynamic loopback port, DPAPI-encrypted credentials, pull-filter and redirect-gateway def1 for IPv4 only, ms_tcpip6 unbound on the physical adapters, cleanup of the 0/1 and 128/1 routes, and failover from UDP to TCP 443.',
+    'tk.desc': 'Managing and tracking forum usernames. Everything stays on your own machine.',
+    'ov.desc': 'An OpenVPN package for Windows, scripts only: tun with <span class="nw">AES-256-GCM</span> and <span class="nw">tls-crypt</span>, cleanup of the 0/1 and 128/1 routes, and failover to <span class="nw">TCP 443</span>.',
+    'web.name': 'Websites & landing pages, too',
+    'web.desc': 'Most are client work, so they are not here. <strong>This one is.</strong>',
 
     'cynic.title': 'The cynical wing',
     'cynic.sub': 'Cynicism is a standard component of the average Bnei Brak resident. If it doesn’t make you laugh – you’re probably not one of us.',
+    'g2049.desc': 'The game you know, plus hidden helper keys.',
+    'act.play': 'Play',
+    'pill.2049': 'Play 2049',
+    'ho.a': 'Block',
+    'ho.b': 'Clear',
+    'ho.badge': 'Derivative work · not my engine',
+    'ho.name': 'Hosmim o Mefanim',
+    'ho.desc': 'A two-sided 3D protest simulator. Full credit to the original author is in the repo.',
     'nf.label': 'Bypassing the filter…',
     'nf.out': 'Gotcha.',
     'nf.desc': 'A filter-bypass tool that bypasses nothing.',
-    'g2049.desc': 'The game you know, plus hidden helper keys.',
-    'act.play': 'Play',
-    'ho.a': 'Block',
-    'ho.b': 'Clear',
-    'ho.badge': 'Derivative work · the engine isn’t mine',
-    'ho.name': 'Hosmim o Mefanim',
-    'ho.desc': 'A two-sided 3D protest simulator. Full credit to the original author is in the repo.',
     'bt.l': 'Send time',
     'bt.u': 'min',
     'bt.btn': 'Send',
@@ -71,20 +68,22 @@
     'bt.alt': '',
     'bt.desc': 'Transfer time in one tap. Got spare time? Someone doesn’t. Instant, final and irreversible.',
     'act.try': 'Try it',
+    'pill.bt': 'Try biTime',
 
     'ai.sub': 'They all talk to you. Nobody’s home.',
-    'eliza.alt': 'ELIZA in Hebrew: a conversation on a green terminal',
     'eliza.name': 'ELIZA',
-    'eliza.desc': 'In 1966 people told her their secrets, and inside there were only a few dozen rules a person wrote by hand. Rebuilt for Windows to match the original transcripts character for character, with an original Hebrew script and more bots on the same engine.',
+    'eliza.desc': 'In 1966 people told her their secrets, and inside there were only a few dozen rules a person wrote by hand. Rebuilt for Windows, character for character.',
     'act.download': 'Download',
+    'pill.eliza': 'Download ELIZA',
     'lv.params': 'parameters',
     'lv.name': 'Lavan Haarami',
     'lv.desc': 'Groundbreaking local AI. 97.4 trillion parameters, runs without a GPU and without any connection to reality.',
     'act.see': 'See for yourself',
+    'pill.lv': 'See Lavan Haarami for yourself',
     'tr.q': 'Who are you',
     'tr.a': 'Your new digital assistant! Ask me anything. :)',
     'tr.name': 'Tom Riddle’s Diary',
-    'tr.desc': 'A chatbot and an unbeatable tic-tac-toe game, both running inside a Word document. No macros, all 1,120 board states pre-mapped.',
+    'tr.desc': 'A chatbot and an unbeatable <span class="nw">tic-tac-toe</span> game, both inside a Word document. No macros, all 1,120 board states pre-mapped.',
 
     'vibe.eyebrow': 'And yes, all of it is vibe coded',
     'vibe.big': 'Every line here was written with AI. Anyone who thinks that is a shortcut is welcome to try shipping a finished product that way.',
@@ -95,16 +94,22 @@
 
     'outro.eyebrow': 'Bottom line',
     'outro.big': 'A good joke demands code just as precise as a working tool. Otherwise it’s simply a broken app.',
-    'outro.sign': 'So the jokes here were built with <span class="hl" data-annotate="highlight">the same rigor</span> as the tools.',
+    'outro.sign': 'So the jokes here were built with <span class="hl">the same rigor</span> as the tools.',
 
     'foot.made': 'This page too: vibe coded.',
     'foot.find': 'Find me',
     'foot.mm': 'mitmachim.top'
   };
 
+  // Strings that only scripts use (the hover label of the cursor).
+  var LIVE = {
+    he: { 'cursor.view': 'לפרויקט' },
+    en: { 'cursor.view': 'Open' }
+  };
+
   var META = {
-    he: { title: 'בני הבוט · BeniaBot', btn: 'EN', btnLang: 'en', btnLabel: 'Switch to English' },
-    en: { title: 'BeniaBot · Windows tools, websites and well-built jokes', btn: 'עב', btnLang: 'he', btnLabel: 'מעבר לעברית' }
+    he: { title: 'בני הבוט · BeniaBot – כלים לווינדוס, אתרים ודפי נחיתה', btn: 'EN', btnLang: 'en', btnLabel: 'Switch to English' },
+    en: { title: 'BeniaBot – Windows tools, websites and well-built jokes', btn: 'עברית', btnLang: 'he', btnLabel: 'מעבר לעברית' }
   };
 
   var root = document.documentElement;
@@ -146,10 +151,12 @@
     document.title = m.title;
     document.querySelectorAll('[data-lang-toggle]').forEach(function (btn) {
       btn.setAttribute('aria-label', m.btnLabel);
-      btn.innerHTML = '<span lang="' + m.btnLang + '">' + m.btn + '</span>';
+      btn.setAttribute('lang', m.btnLang);
+      btn.textContent = m.btn;
     });
     current = lang;
     root.classList.remove('i18n-wait');
+    root.classList.add('i18n-on');
   }
 
   function remember(lang) {
@@ -161,21 +168,37 @@
     } catch (e) {}
   }
 
-  function set(lang) {
-    if (lang === current) return;
+  function swap(lang) {
+    pending = null;
     document.dispatchEvent(new CustomEvent('bb:beforelang', { detail: { lang: lang } }));
     apply(lang);
     remember(lang);
     document.dispatchEvent(new CustomEvent('bb:lang', { detail: { lang: lang } }));
   }
 
+  // The language the page is heading to. During a cross-fade it differs from
+  // `current` for a moment, and quick repeat clicks must count from it.
+  var pending = null;
+
+  function set(lang) {
+    if (lang === (pending || current)) return;
+    pending = lang;
+    // A soft cross-fade where the browser can do it; an instant swap elsewhere.
+    var calm = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (document.startViewTransition && !calm) {
+      try { document.startViewTransition(function () { swap(lang); }); return; } catch (e) {}
+    }
+    swap(lang);
+  }
+
   document.querySelectorAll('[data-lang-toggle]').forEach(function (btn) {
-    btn.addEventListener('click', function () { set(current === 'en' ? 'he' : 'en'); });
+    btn.addEventListener('click', function () { set((pending || current) === 'en' ? 'he' : 'en'); });
   });
 
   window.BB_I18N = {
     get lang() { return current; },
-    set: set
+    set: set,
+    t: function (key) { return (LIVE[current] && LIVE[current][key]) || ''; }
   };
 
   apply(current);
