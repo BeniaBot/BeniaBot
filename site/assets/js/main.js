@@ -1,4 +1,4 @@
-/* BeniaBot landing page: navigation, motion and the small demos inside the cards.
+/* BeniaBot landing page: navigation, motion, the card swell and the small demos.
    All of it is an extra layer. With this file missing or failing, the page is
    still complete and readable (see the .no-anim rules in style.css). */
 (function () {
@@ -16,13 +16,12 @@
   var lenis = null;
   var splits = [];       // text splits that must be undone before a language swap
   var demos = [];        // the little animations inside the cards
-  var notes = [];        // hand-drawn annotations
-  var notesSeen = {};    // which annotations were already drawn, by i18n key
-  var marqueeApi = null;
+  var hlObserver = null;
 
   initSpotlight();
   initNav();
   initActiveSection();
+  initHighlights();
 
   var motion = !!(window.gsap && window.ScrollTrigger && window.SplitText) && !reduceMotion && !root.classList.contains('no-anim');
   if (motion) {
@@ -40,21 +39,20 @@
     clearTimeout(window.__bbFailsafe);
     root.classList.remove('i18n-wait');
     root.classList.add('no-anim');
-    initAnnotations(false);
-    document.addEventListener('bb:beforelang', removeAnnotations);
-    document.addEventListener('bb:lang', function () { initAnnotations(false); });
   }
+  document.addEventListener('bb:lang', initHighlights);
 
   /* ---------- library-free parts ---------- */
 
-  // The light inside a card follows the pointer.
+  // The light inside a card follows the pointer (GSAP's tilt reuses the same variables).
   function initSpotlight() {
     if (!finePointer) return;
     $$('[data-card]').forEach(function (card) {
+      var inner = $('.card-inner', card);
       card.addEventListener('pointermove', function (e) {
         var r = card.getBoundingClientRect();
-        card.style.setProperty('--mx', (e.clientX - r.left) + 'px');
-        card.style.setProperty('--my', (e.clientY - r.top) + 'px');
+        inner.style.setProperty('--mx', ((e.clientX - r.left) / r.width * 100) + '%');
+        inner.style.setProperty('--my', ((e.clientY - r.top) / r.height * 100) + '%');
       });
     });
   }
@@ -76,7 +74,8 @@
     update();
   }
 
-  // The wing in the middle of the screen sets the page accent and the active nav link.
+  // The wing in the middle of the screen drives the nav colour, the active link
+  // and the backdrop tint (ambient-gl.js reads html[data-active]).
   function initActiveSection() {
     if (!('IntersectionObserver' in window)) return;
     var sections = $$('[data-wing]');
@@ -92,38 +91,22 @@
     sections.forEach(function (s) { io.observe(s); });
   }
 
-  /* ---------- hand-drawn annotations (Rough Notation) ---------- */
-
-  function initAnnotations(animate) {
-    if (!window.RoughNotation) return;
-    removeAnnotations();
-    $$('[data-annotate]').forEach(function (el) {
-      var type = el.getAttribute('data-annotate');
-      var host = el.closest('[data-i18n]');
-      var key = (host && host.getAttribute('data-i18n')) || type;
-      var ann = RoughNotation.annotate(el, {
-        type: type,
-        color: type === 'highlight' ? 'rgba(255, 184, 76, .24)' : '#ffb84c',
-        strokeWidth: type === 'highlight' ? 1 : 2,
-        padding: type === 'highlight' ? [2, 6] : 2,
-        iterations: type === 'highlight' ? 1 : 2,
-        multiline: true,
-        animate: animate && !notesSeen[key],
-        animationDuration: 900
+  // The underline under the key words draws itself once it is on screen.
+  function initHighlights() {
+    var els = $$('.hl');
+    if (hlObserver) hlObserver.disconnect();
+    if (reduceMotion || !('IntersectionObserver' in window)) {
+      els.forEach(function (el) { el.classList.add('is-in'); });
+      return;
+    }
+    hlObserver = new IntersectionObserver(function (entries) {
+      entries.forEach(function (en) {
+        if (!en.isIntersecting) return;
+        en.target.classList.add('is-in');
+        hlObserver.unobserve(en.target);
       });
-      notes.push(ann);
-      if (!animate || notesSeen[key]) { ann.show(); return; }
-      ScrollTrigger.create({
-        trigger: el,
-        start: 'top 78%',
-        once: true,
-        onEnter: function () { notesSeen[key] = true; ann.show(); }
-      });
-    });
-  }
-  function removeAnnotations() {
-    notes.forEach(function (a) { a.remove(); });
-    notes = [];
+    }, { rootMargin: '0px 0px -20% 0px' });
+    els.forEach(function (el) { hlObserver.observe(el); });
   }
 
   /* ---------- motion ---------- */
@@ -146,21 +129,17 @@
     var scrub = $('[data-scrub]');
     if (scrub) splits.push(scrubWords(scrub));
     scrambleTitle();
-    tiltShots();
-    marqueeApi = marquee();
     cardDemos();
-    initAnnotations(true);
+    initSwell();
+    initCursor();
 
     document.addEventListener('bb:beforelang', function () {
       demos.forEach(function (d) { d.finish(); });
       splits.forEach(function (s) { s.destroy(); });
-      if (marqueeApi) marqueeApi.destroy();
-      removeAnnotations();
     });
     document.addEventListener('bb:lang', function () {
       splits.forEach(function (s) { s.build(); });
-      if (marqueeApi) marqueeApi.build();
-      initAnnotations(true);
+      setCursorText();
       ScrollTrigger.refresh();
     });
 
@@ -177,8 +156,9 @@
       if (lenis) { lenis.destroy(); lenis = null; }
       if (window.gsap) {
         gsap.killTweensOf('*');
-        gsap.set('[data-reveal], [data-split], [data-split-hero], [data-hero-item], [data-scramble-title], [data-tilt-in], [data-marquee]', { clearProps: 'opacity,visibility,transform' });
+        gsap.set('[data-reveal], [data-split], [data-split-hero], [data-hero-item], [data-scramble-title], .card-inner', { clearProps: 'opacity,visibility,transform' });
       }
+      root.classList.remove('tilt-on');
     } catch (e) { /* the .no-anim class below is the real safety net */ }
   }
 
@@ -196,28 +176,33 @@
     });
   }
 
+  // Hebrew titles split by words, not letters: letter boxes break the spacing.
+  function wordSplit(el) {
+    return SplitText.create(el, { type: 'words', mask: 'words', wordsClass: 'w' });
+  }
+
   function heroIntro() {
     var title = $('[data-split-hero]');
     var items = $$('[data-hero-item]');
     var hero = {
       split: null,
       build: function (animate) {
-        hero.split = SplitText.create(title, { type: 'words,chars', mask: 'words', wordsClass: 'w', charsClass: 'c' });
+        hero.split = wordSplit(title);
         gsap.set(title, { autoAlpha: 1 });
         if (animate) {
-          return gsap.from(hero.split.chars, { yPercent: 118, duration: 1.2, ease: 'expo.out', stagger: 0.05 });
+          return gsap.from(hero.split.words, { yPercent: 110, duration: 1.2, ease: 'expo.out', stagger: 0.12 });
         }
       },
       destroy: function () {
         if (!hero.split) return;
-        gsap.killTweensOf(hero.split.chars);
+        gsap.killTweensOf(hero.split.words);
         hero.split.revert();
         hero.split = null;
       }
     };
     var tl = gsap.timeline({ delay: 0.1 });
     tl.add(hero.build(true), 0);
-    tl.fromTo(items, { autoAlpha: 0, y: 22 }, { autoAlpha: 1, y: 0, duration: 0.9, ease: 'power3.out', stagger: 0.09 }, 0.35);
+    tl.fromTo(items, { autoAlpha: 0, y: 20 }, { autoAlpha: 1, y: 0, duration: 0.9, ease: 'power3.out', stagger: 0.09 }, 0.35);
     splits.push({ build: function () { hero.build(false); }, destroy: hero.destroy });
   }
 
@@ -233,27 +218,27 @@
     });
   }
 
-  // Section titles rise letter by letter when they scroll in.
+  // Section titles rise word by word when they scroll in.
   function splitReveal(el) {
     var api = { split: null, st: null, done: false };
     api.build = function () {
-      api.split = SplitText.create(el, { type: 'words,chars', mask: 'words', wordsClass: 'w', charsClass: 'c' });
+      api.split = wordSplit(el);
       gsap.set(el, { autoAlpha: 1 });
       if (api.done) return;
-      gsap.set(api.split.chars, { yPercent: 118 });
+      gsap.set(api.split.words, { yPercent: 110 });
       api.st = ScrollTrigger.create({
         trigger: el,
         start: 'top 88%',
         once: true,
         onEnter: function () {
           api.done = true;
-          gsap.to(api.split.chars, { yPercent: 0, duration: 1.1, ease: 'expo.out', stagger: 0.035 });
+          gsap.to(api.split.words, { yPercent: 0, duration: 1.1, ease: 'expo.out', stagger: 0.1 });
         }
       });
     };
     api.destroy = function () {
       if (api.st) { api.st.kill(); api.st = null; }
-      if (api.split) { gsap.killTweensOf(api.split.chars); api.split.revert(); api.split = null; }
+      if (api.split) { gsap.killTweensOf(api.split.words); api.split.revert(); api.split = null; }
     };
     api.build();
     return api;
@@ -264,11 +249,11 @@
     var api = { split: null, tween: null };
     api.build = function () {
       api.split = SplitText.create(el, { type: 'words', wordsClass: 'w' });
-      api.tween = gsap.fromTo(api.split.words, { opacity: 0.16 }, {
+      api.tween = gsap.fromTo(api.split.words, { opacity: 0.28 }, {
         opacity: 1,
         ease: 'none',
         stagger: 0.12,
-        scrollTrigger: { trigger: el, start: 'top 82%', end: 'bottom 52%', scrub: 0.6 }
+        scrollTrigger: { trigger: el, start: 'top 85%', end: 'bottom 72%', scrub: 0.6 }
       });
     };
     api.destroy = function () {
@@ -283,67 +268,109 @@
     return api;
   }
 
-  // "AI: Absent Intelligence" computes itself into existence.
+  // "AI: Absent Intelligence" computes itself into existence, one word at a
+  // time, so the spaces never disappear and the line never reflows.
   function scrambleTitle() {
     var el = $('[data-scramble-title]');
     if (!el) return;
-    var text = el.textContent;
-    el.setAttribute('aria-label', text);
-    if (!window.ScrambleTextPlugin) { gsap.set(el, { autoAlpha: 1 }); return; }
+    var words = $$('.sw', el);
+    if (!window.ScrambleTextPlugin || !words.length) { gsap.set(el, { autoAlpha: 1 }); return; }
     ScrollTrigger.create({
       trigger: el,
       start: 'top 88%',
       once: true,
       onEnter: function () {
+        el.style.minHeight = el.offsetHeight + 'px';
         gsap.set(el, { autoAlpha: 1 });
-        gsap.to(el, { duration: 1.8, scrambleText: { text: text, chars: 'upperAndLowerCase', revealDelay: 0.35, speed: 0.45 } });
+        var tl = gsap.timeline({ onComplete: function () { el.style.minHeight = ''; } });
+        words.forEach(function (w, i) {
+          tl.to(w, { duration: 1.1, scrambleText: { text: w.textContent, chars: 'upperAndLowerCase', revealDelay: 0.35, speed: 0.45 } }, i * 0.18);
+        });
       }
     });
   }
 
-  // Screenshots straighten up from a slight tilt as they scroll into place.
-  function tiltShots() {
-    $$('[data-tilt-in]').forEach(function (fig) {
-      gsap.fromTo(fig, { rotateX: 14, y: 46, scale: 0.95 }, {
-        rotateX: 0, y: 0, scale: 1, ease: 'none',
-        scrollTrigger: { trigger: fig.closest('.card'), start: 'top 96%', end: 'top 38%', scrub: 0.8 }
+  /* ---------- the swell ---------- */
+
+  // On a mouse: the card leans toward the pointer and rises toward the viewer,
+  // and the layers inside move at their own depth. Touch, keyboard and reduced
+  // motion get the plain CSS version.
+  function initSwell() {
+    var mm = gsap.matchMedia();
+    mm.add('(hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference)', function () {
+      root.classList.add('tilt-on');
+      var offs = [];
+      $$('[data-card]').forEach(function (card) {
+        var inner = $('.card-inner', card);
+        gsap.set(inner, { transformPerspective: 900 });
+        var q = function (el, prop, d) { return gsap.quickTo(el, prop, { duration: d || 0.5, ease: 'power3' }); };
+        var rx = q(inner, 'rotationX');
+        var ry = q(inner, 'rotationY');
+        var lift = q(inner, 'z', 0.45);
+        var rise = q(inner, 'y', 0.45);
+        var layers = $$('[data-depth]', card).map(function (el) {
+          return { d: +el.getAttribute('data-depth'), x: q(el, 'x', 0.6), y: q(el, 'y', 0.6) };
+        });
+        var zoom = $$('.media-shot, .art', card);
+        var rect = null;
+        function move(e) {
+          if (e.pointerType !== 'mouse') return;
+          rect = rect || card.getBoundingClientRect();
+          var nx = (e.clientX - rect.left) / rect.width - 0.5;
+          var ny = (e.clientY - rect.top) / rect.height - 0.5;
+          ry(nx * 9);
+          rx(-ny * 9);
+          layers.forEach(function (l) { l.x(-nx * l.d); l.y(-ny * l.d); });
+        }
+        function enter(e) {
+          if (e.pointerType !== 'mouse') return;
+          rect = null;
+          lift(36);
+          rise(-6);
+          gsap.to(zoom, { scale: 1.05, duration: 0.7, ease: 'power3.out', overwrite: 'auto' });
+        }
+        function leave() {
+          rect = null;
+          rx(0); ry(0); lift(0); rise(0);
+          layers.forEach(function (l) { l.x(0); l.y(0); });
+          gsap.to(zoom, { scale: 1, duration: 0.7, ease: 'power3.out', overwrite: 'auto' });
+        }
+        function drop() { rect = null; }
+        card.addEventListener('pointerenter', enter);
+        card.addEventListener('pointermove', move);
+        card.addEventListener('pointerleave', leave);
+        window.addEventListener('scroll', drop, { passive: true });
+        offs.push(function () {
+          card.removeEventListener('pointerenter', enter);
+          card.removeEventListener('pointermove', move);
+          card.removeEventListener('pointerleave', leave);
+          window.removeEventListener('scroll', drop);
+        });
       });
+      return function () {
+        offs.forEach(function (f) { f(); });
+        root.classList.remove('tilt-on');
+      };
     });
   }
 
-  // Endless strip; scrolling fast makes it run faster.
-  function marquee() {
-    var track = $('[data-marquee]');
-    if (!track) return null;
-    var api = { loop: null, st: null, clone: null };
-    api.build = function () {
-      var group = track.firstElementChild;
-      api.clone = group.cloneNode(true);
-      $$('[data-i18n]', api.clone).forEach(function (n) { n.removeAttribute('data-i18n'); });
-      track.appendChild(api.clone);
-      var from = isRtl() ? -50 : 0;
-      api.loop = gsap.fromTo(track, { xPercent: from }, { xPercent: from + 50 * (isRtl() ? 1 : -1), ease: 'none', duration: 34, repeat: -1 });
-      api.st = ScrollTrigger.create({
-        trigger: track.parentElement,
-        start: 'top bottom',
-        end: 'bottom top',
-        onToggle: function (self) { if (self.isActive) api.loop.play(); else api.loop.pause(); },
-        onUpdate: function (self) {
-          var boost = 1 + Math.min(4, Math.abs(self.getVelocity()) / 500);
-          gsap.to(api.loop, { timeScale: boost, duration: 0.25, overwrite: true, onComplete: function () {
-            gsap.to(api.loop, { timeScale: 1, duration: 1.2 });
-          } });
-        }
-      });
-    };
-    api.destroy = function () {
-      if (api.st) { api.st.kill(); api.st = null; }
-      if (api.loop) { api.loop.kill(); api.loop = null; }
-      gsap.set(track, { clearProps: 'transform' });
-      if (api.clone) { api.clone.remove(); api.clone = null; }
-    };
-    api.build();
-    return api;
+  // A soft cursor that grows over a project and says where it leads (mouse only).
+  var cursor = null;
+  function initCursor() {
+    if (!window.MouseFollower) return;
+    var mm = gsap.matchMedia();
+    mm.add('(hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference)', function () {
+      MouseFollower.registerGSAP(gsap);
+      cursor = new MouseFollower({ speed: 0.5, skewing: 0, skewingText: 0, stateDetection: { '-pointer': 'a, button', '-hidden': 'iframe' } });
+      setCursorText();
+      return function () { if (cursor) { cursor.destroy(); cursor = null; } };
+    });
+  }
+  function setCursorText() {
+    var label = window.BB_I18N ? BB_I18N.t('cursor.view') : '';
+    $$('[data-card] .stretched').forEach(function (a) {
+      if (label) a.setAttribute('data-cursor-text', label);
+    });
   }
 
   /* ---------- the demos inside the cards ---------- */
@@ -352,21 +379,21 @@
   // and again on hover. Timelines are rebuilt on every play so they always pick
   // up the current language; finish() jumps to the end state before a swap.
   function demo(sel, build) {
-    var viz = $(sel);
-    if (!viz) return;
-    var card = viz.closest('[data-card]');
-    var d = { tl: null };
-    d.play = function () {
-      if (d.tl) {
-        if (d.tl.isActive()) return;
-        d.tl.progress(1).kill();
-      }
-      d.tl = build(viz);
-    };
-    d.finish = function () { if (d.tl) d.tl.progress(1); };
-    ScrollTrigger.create({ trigger: card, start: 'top 90%', once: true, onEnter: d.play });
-    if (finePointer) card.addEventListener('mouseenter', d.play);
-    demos.push(d);
+    $$(sel).forEach(function (viz) {
+      var card = viz.closest('[data-card]');
+      var d = { tl: null };
+      d.play = function () {
+        if (d.tl) {
+          if (d.tl.isActive()) return;
+          d.tl.progress(1).kill();
+        }
+        d.tl = build(viz);
+      };
+      d.finish = function () { if (d.tl) d.tl.progress(1); };
+      ScrollTrigger.create({ trigger: card, start: 'top 90%', once: true, onEnter: d.play });
+      if (finePointer) card.addEventListener('mouseenter', d.play);
+      demos.push(d);
+    });
   }
 
   function scramble(el, text, duration) {
@@ -385,8 +412,8 @@
     // Room planner: everyone flies into a room.
     demo('.viz-rooms', function (viz) {
       return gsap.timeline().from($$('.room i', viz), {
-        x: function () { return gsap.utils.random(-90, 90); },
-        y: function () { return gsap.utils.random(50, 120); },
+        x: function () { return gsap.utils.random(-80, 80); },
+        y: function () { return gsap.utils.random(40, 100); },
         scale: 0.3,
         autoAlpha: 0,
         duration: 0.9,
@@ -404,15 +431,12 @@
     demo('.viz-nicks', function (viz) {
       return gsap.timeline()
         .from($$('.nick', viz), { autoAlpha: 0, y: 14, duration: 0.45, ease: 'power3.out', stagger: 0.12 }, 0.1)
-        .from($$('.nick .bar', viz), { scaleX: 0, duration: 0.6, ease: 'power3.out', stagger: 0.05 }, 0.3)
-        .from($('.local', viz), { autoAlpha: 0, scale: 0.8, duration: 0.4, ease: 'back.out(2)' }, '-=0.2');
+        .from($$('.nick .bar', viz), { scaleX: 0, duration: 0.6, ease: 'power3.out', stagger: 0.05 }, 0.3);
     });
 
-    // Websites: a page assembles itself.
-    demo('.viz-web', function (viz) {
-      return gsap.timeline()
-        .from($$('.mb-h, .mb-l', viz), { scaleX: 0, transformOrigin: isRtl() ? '100% 50%' : '0 50%', duration: 0.6, ease: 'power3.out', stagger: 0.1 }, 0.2)
-        .from($$('.mb-grid i', viz), { autoAlpha: 0, y: 12, duration: 0.45, ease: 'power3.out', stagger: 0.1 }, '-=0.3');
+    // ovpn-kit: the config prints itself, nothing more.
+    demo('.viz-spec', function (viz) {
+      return gsap.timeline().from($$('p', viz), { autoAlpha: 0, duration: 0.25, stagger: 0.12 }, 0.2);
     });
 
     // not-free: 0% → 99%, a long pause, and the truth.
@@ -447,11 +471,15 @@
       var n = $('[data-bt-n]', viz);
       var done = $('[data-bt-done]', viz);
       var btn = $('.ph-btn', viz);
+      // Everything on the screen except the confirmation, so the two never overlap.
+      var screen = $$('.phone > :not([data-bt-done])', viz);
       return gsap.timeline()
         .set(done, { autoAlpha: 0 })
+        .set(screen, { autoAlpha: 1 })
         .to(btn, { scale: 0.9, duration: 0.12, yoyo: true, repeat: 1, ease: 'power2.inOut' }, 0.4)
         .fromTo(n, { innerText: 60 }, { innerText: 0, snap: { innerText: 1 }, duration: 1.4, ease: 'power1.in' }, 0.6)
-        .to(done, { autoAlpha: 1, duration: 0.35 }, '+=0.2');
+        .to(screen, { autoAlpha: 0, duration: 0.2 }, '+=0.25')
+        .fromTo(done, { autoAlpha: 0, y: 8 }, { autoAlpha: 1, y: 0, duration: 0.35, ease: 'power2.out' });
     });
 
     // Lavan Haarami: the parameter count recalculates itself, very seriously.
@@ -462,7 +490,7 @@
       return tl;
     });
 
-    // Tom Riddle's Diary: you type, Word answers.
+    // Tom Riddle's Diary: you type, Word answers, and the board fills.
     demo('.viz-word', function (viz) {
       var q = $('[data-type]', viz);
       var a = $('.w-a', viz);
