@@ -318,7 +318,7 @@ button { font: inherit; color: inherit; }
   font-size: var(--fs-2xl);
   font-weight: 600;
   line-height: 1.25;
-  text-wrap: pretty;
+  text-wrap: balance;
 }
 @media (min-width: 640px) { .intro-text bdi, .wi-name bdi { white-space: nowrap; } }
 .wing-index { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--gap); margin-top: 48px; }
@@ -346,6 +346,7 @@ button { font: inherit; color: inherit; }
 
 .hl {
   color: var(--accent);
+  white-space: nowrap;
   background: linear-gradient(currentColor 0 0) 0 100% / 0% .07em no-repeat;
   transition: background-size 1s var(--ease) .2s;
 }
@@ -587,13 +588,13 @@ button { font: inherit; color: inherit; }
 @keyframes blink { 50% { opacity: 0; } }
 
 /* Tik-Nick: local-only nick cards */
-.viz-nicks { align-content: center; gap: 8px; }
+.viz-nicks { align-content: center; gap: 6px; }
 .viz-nicks .nick {
   display: flex;
   align-items: center;
   gap: 10px;
-  width: 74%;
-  padding: 9px 11px;
+  width: 64%;
+  padding: 7px 11px;
   border-radius: 10px;
   border: 1px solid var(--line);
   background: var(--surface-2);
@@ -621,7 +622,7 @@ button { font: inherit; color: inherit; }
 .local .i { width: 13px; height: 13px; }
 
 /* ovpn-kit: a spec sheet, nothing more */
-.viz-spec { place-items: center start; align-content: center; gap: 4px; padding: 0 9%; font: 500 .74rem/1.55 var(--mono); color: var(--dim); text-align: left; }
+.viz-spec { grid-template-columns: max-content; justify-content: center; justify-items: start; align-content: center; gap: 4px; padding: 0; font: 500 .74rem/1.55 var(--mono); color: var(--dim); text-align: left; }
 .viz-spec p { white-space: nowrap; }
 .viz-spec b { color: var(--muted); font-weight: 600; }
 .viz-spec span { color: var(--accent); }
@@ -704,7 +705,7 @@ button { font: inherit; color: inherit; }
   color: #16243f;
   box-shadow: 0 30px 60px -20px rgb(0 0 0 / .8), 0 0 0 1px var(--line-2);
   overflow: hidden;
-  filter: brightness(.94);
+  filter: brightness(.86);
 }
 .ph-ic { display: grid; place-items: center; width: 38px; height: 38px; border-radius: 50%; background: linear-gradient(135deg, #ffb36b, #ff6f8e); color: #fff; }
 .ph-ic .i { width: 18px; height: 18px; }
@@ -725,7 +726,7 @@ button { font: inherit; color: inherit; }
 /* Tom Riddle's Diary: a Word page that answers back */
 .viz-word { align-items: start; padding-top: 18px; }
 .viz-word .page {
-  width: 76%;
+  width: 66%;
   height: 260px;
   padding: 16px 18px;
   border-radius: 6px 6px 0 0;
@@ -734,7 +735,7 @@ button { font: inherit; color: inherit; }
   box-shadow: 0 30px 60px -20px rgb(0 0 0 / .8);
   font-size: .78rem;
   line-height: 1.5;
-  filter: brightness(.94);
+  filter: brightness(.86);
 }
 .w-q { min-height: 1.6em; }
 .w-q .caret { background: #2b579a; width: 2px; }
@@ -749,9 +750,10 @@ button { font: inherit; color: inherit; }
 
 /* ================= VIBE CODING ================= */
 .vibe { padding-top: var(--section); scroll-margin-top: var(--nav-h); }
-.vibe-inner { max-width: calc(46rem + 2 * var(--gutter)); }
+.vibe-inner > * { max-width: 46rem; }
 .vibe-big { font-size: var(--fs-2xl); font-weight: 600; line-height: 1.22; letter-spacing: -.01em; text-wrap: pretty; }
-.vibe-big .w { will-change: opacity; }
+/* Inline, so a full stop after a Latin word can't start a line of its own. */
+.vibe-big .w { display: inline !important; will-change: opacity; }
 .vibe-lead { margin-top: 40px; color: var(--muted); font-size: var(--fs-lg); text-wrap: pretty; }
 .answers { margin-top: 18px; }
 .answers li {
@@ -843,11 +845,19 @@ button { font: inherit; color: inherit; }
 }
 @media (max-width: 860px) {
   .nav-links { display: none; }
+}
+@media (max-width: 700px) {
   .band { grid-template-columns: 1fr; gap: 20px; }
   .band-art { max-width: 360px; }
 }
+@media (min-width: 641px) {
+  /* Same height for every description, so rows in different wings line up. */
+  .card-desc { min-height: calc(1.55em * 3); }
+}
 @media (max-width: 640px) {
   :root { --r-card: 18px; --nav-h: 60px; }
+  .hero-tagline { gap: 6px 18px; }
+  .hero-tagline i { display: none; }
   body { font-size: 1rem; }
   .grid { grid-template-columns: minmax(0, 1fr); }
   .grid > .card, .grid > .card:last-child:nth-child(n) { grid-column: auto; }

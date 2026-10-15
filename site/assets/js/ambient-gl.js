@@ -155,7 +155,9 @@ function start() {
     if (!outro) return 0;
     const top = outro.getBoundingClientRect().top;
     const vh = window.innerHeight;
-    return Math.min(1, Math.max(0, (vh - top) / (vh * 0.8)));
+    // Starts only once the closing line reaches the middle of the screen, so
+    // the text just above it never sits on a bright patch.
+    return Math.min(1, Math.max(0, (vh * 0.55 - top) / (vh * 0.45)));
   }
   function dimNow() {
     const h = hero.offsetHeight || window.innerHeight;

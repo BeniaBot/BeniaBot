@@ -19,7 +19,7 @@
     'hero.cta': 'See the work',
 
     'intro.eyebrow': 'Three wings',
-    'intro.text': 'The real tools, the cynical wing and AI: Absent Intelligence are <span class="hl">kept apart on purpose</span>, so no joke misleads you about the standard of the work.',
+    'intro.text': 'The real tools, the cynical wing and <span class="nw">AI: Absent Intelligence</span> are <span class="hl">kept apart on purpose</span>, so no joke misleads you about the standard of the work.',
 
     'tools.title': 'Real tools',
     'tools.sub': 'Written from scratch, with stubborn perfectionism and no compromises.',
