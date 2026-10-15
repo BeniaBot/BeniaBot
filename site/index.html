@@ -1,0 +1,430 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>בני הבוט · BeniaBot</title>
+<meta name="description" content="כלים לווינדוס, אתרים ודפי נחיתה, ופרויקטים ציניים שנבנו באותה קפדנות. עברית מלאה, אופליין קודם, הכול בוויב קודינג.">
+<meta name="theme-color" content="#0a0a0d">
+<meta name="color-scheme" content="dark">
+<link rel="canonical" href="https://beniabot.github.io/BeniaBot/">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://beniabot.github.io/BeniaBot/">
+<meta property="og:title" content="בני הבוט · BeniaBot">
+<meta property="og:description" content="כלים לווינדוס, אתרים ודפי נחיתה, ופרויקטים ציניים. עברית מלאה, אופליין קודם, הכול בוויב קודינג.">
+<meta property="og:image" content="https://beniabot.github.io/BeniaBot/og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:locale" content="he_IL">
+<meta property="og:locale:alternate" content="en_US">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="preload" href="vendor/fonts/rubik-hebrew-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="vendor/fonts/rubik-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="vendor/lenis/lenis.css">
+<link rel="stylesheet" href="assets/css/style.css">
+<script>
+  // Runs before first paint: language, and a failsafe that reveals everything
+  // if the animation script never reports in.
+  (function () {
+    var d = document.documentElement, lang = null;
+    try { lang = new URLSearchParams(location.search).get('lang'); } catch (e) {}
+    if (lang !== 'en' && lang !== 'he') { try { lang = localStorage.getItem('bb-lang'); } catch (e) {} }
+    if (lang === 'en') { d.lang = 'en'; d.dir = 'ltr'; d.classList.add('i18n-wait'); }
+    d.classList.add('js');
+    window.__bbFailsafe = setTimeout(function () { d.classList.add('no-anim'); d.classList.remove('i18n-wait'); }, 4000);
+  })();
+</script>
+</head>
+<body>
+
+<svg class="sprite" aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg">
+  <symbol id="i-zap" viewBox="0 0 24 24"><path d="M15.914 4a1.5 1.5 0 00-2.474-1.561l-9 9A1.5 1.5 0 005.5 14h4.002a.5.5 0 01.471.666L8.086 20a1.5 1.5 0 002.475 1.56l9-9A1.5 1.5 0 0018.5 10h-3.997a.5.5 0 01-.472-.667z"/></symbol>
+  <symbol id="i-drama" viewBox="0 0 24 24"><path d="M10 11h.01"/><path d="M14 6h.01"/><path d="M18 6h.01"/><path d="M6.5 13.1h.01"/><path d="M22 5c0 9-4 12-6 12s-6-3-6-12c0-2 2-3 6-3s6 1 6 3"/><path d="M17.4 9.9c-.8.8-2 .8-2.8 0"/><path d="M10.1 7.1C9 7.2 7.7 7.7 6 8.6c-3.5 2-4.7 3.9-3.7 5.6 4.5 7.8 9.5 8.4 11.2 7.4.9-.5 1.9-2.1 1.9-4.7"/><path d="M9.1 16.5c.3-1.1 1.4-1.7 2.4-1.4"/></symbol>
+  <symbol id="i-brain" viewBox="0 0 24 24"><path d="M12 18V5"/><path d="M15 13a4.17 4.17 0 0 1-3-4 4.17 4.17 0 0 1-3 4"/><path d="M17.598 6.5A3 3 0 1 0 12 5a3 3 0 1 0-5.598 1.5"/><path d="M17.997 5.125a4 4 0 0 1 2.526 5.77"/><path d="M18 18a4 4 0 0 0 2-7.464"/><path d="M19.967 17.483A4 4 0 1 1 12 18a4 4 0 1 1-7.967-.517"/><path d="M6 18a4 4 0 0 1-2-7.464"/><path d="M6.003 5.125a4 4 0 0 0-2.526 5.77"/></symbol>
+  <symbol id="i-bot" viewBox="0 0 24 24"><path d="M12 8V4H8"/><rect width="16" height="12" x="4" y="8" rx="2"/><path d="M2 14h2"/><path d="M20 14h2"/><path d="M15 13v2"/><path d="M9 13v2"/></symbol>
+  <symbol id="i-down" viewBox="0 0 24 24"><path d="M12 5v14"/><path d="m19 12-7 7-7-7"/></symbol>
+  <symbol id="i-download" viewBox="0 0 24 24"><path d="M12 15V3"/><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="m7 10 5 5 5-5"/></symbol>
+  <symbol id="i-play" viewBox="0 0 24 24"><path d="M5 5a2 2 0 0 1 3.008-1.728l11.997 6.998a2 2 0 0 1 .003 3.458l-12 7A2 2 0 0 1 5 19z"/></symbol>
+  <symbol id="i-globe" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></symbol>
+  <symbol id="i-usb" viewBox="0 0 24 24"><circle cx="10" cy="7" r="1"/><circle cx="4" cy="20" r="1"/><path d="M4.7 19.3 19 5"/><path d="m21 3-3 1 2 2Z"/><path d="M9.26 7.68 5 12l2 5"/><path d="m10 14 5 2 3.5-3.5"/><path d="m18 12 1-1 1 1-1 1Z"/></symbol>
+  <symbol id="i-offline" viewBox="0 0 24 24"><path d="M10.94 5.274A7 7 0 0 1 15.71 10h1.79a4.5 4.5 0 0 1 4.222 6.057"/><path d="M18.796 18.81A4.5 4.5 0 0 1 17.5 19H9A7 7 0 0 1 5.79 5.78"/><path d="m2 2 20 20"/></symbol>
+  <symbol id="i-hourglass" viewBox="0 0 24 24"><path d="M5 22h14"/><path d="M5 2h14"/><path d="M17 22v-4.172a2 2 0 0 0-.586-1.414L12 12l-4.414 4.414A2 2 0 0 0 7 17.828V22"/><path d="M7 2v4.172a2 2 0 0 0 .586 1.414L12 12l4.414-4.414A2 2 0 0 0 17 6.172V2"/></symbol>
+  <symbol id="i-lock" viewBox="0 0 24 24"><circle cx="12" cy="16" r="1"/><rect x="3" y="10" width="18" height="12" rx="2"/><path d="M7 10V7a5 5 0 0 1 10 0v3"/></symbol>
+  <symbol id="i-github" viewBox="0 0 24 24"><path fill="currentColor" stroke="none" d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></symbol>
+</svg>
+
+<a class="skip" href="#work" data-i18n="skip">דילוג לעבודות</a>
+
+<header class="nav" data-nav>
+  <div class="nav-inner">
+    <a class="brand" href="#top" aria-label="BeniaBot">
+      <svg class="brand-mark" viewBox="0 0 64 64" aria-hidden="true"><path d="M32 13v7" stroke="currentColor" stroke-width="4" stroke-linecap="round"/><circle cx="32" cy="11" r="3.5" fill="currentColor"/><rect x="13" y="21" width="38" height="29" rx="9" fill="none" stroke="currentColor" stroke-width="4"/><circle class="eye" cx="25" cy="35" r="3.6"/><circle class="eye" cx="39" cy="35" r="3.6"/></svg>
+      <span class="brand-name">BeniaBot</span>
+    </a>
+    <nav class="nav-links" aria-label="ניווט" data-i18n-aria="nav.label">
+      <a href="#tools" data-nav-link="tools" data-i18n="nav.tools">כלים</a>
+      <a href="#cynic" data-nav-link="cynic" data-i18n="nav.cynic">האגף הציני</a>
+      <a href="#ai" data-nav-link="ai"><bdi>AI</bdi></a>
+      <a href="#vibe" data-nav-link="vibe" data-i18n="nav.vibe">ויב קודינג</a>
+    </nav>
+    <div class="nav-actions">
+      <button class="lang-btn" type="button" data-lang-toggle aria-label="Switch to English"><span lang="en">EN</span></button>
+      <a class="icon-btn" href="https://github.com/BeniaBot" aria-label="GitHub"><svg class="i"><use href="#i-github"/></svg></a>
+    </div>
+  </div>
+  <div class="nav-progress" aria-hidden="true"><i data-progress></i></div>
+</header>
+
+<main id="top">
+
+  <!-- ============ HERO ============ -->
+  <section class="hero" aria-labelledby="hero-title">
+    <div class="hero-bg" aria-hidden="true"></div>
+    <canvas class="hero-gl" aria-hidden="true" data-hero-gl></canvas>
+    <div class="hero-inner wrap">
+      <p class="hero-kicker mono" data-hero-item><span class="dot" aria-hidden="true"></span><bdi dir="ltr">github.com/BeniaBot</bdi></p>
+      <h1 class="hero-title" id="hero-title" data-i18n="hero.title" data-split-hero>בני הבוט</h1>
+      <ul class="chips" data-hero-item>
+        <li data-i18n="hero.c1">כלים לווינדוס</li>
+        <li data-i18n="hero.c2">אתרים ודפי נחיתה</li>
+        <li data-i18n="hero.c3">עברית מלאה</li>
+        <li data-i18n="hero.c4">אופליין קודם</li>
+      </ul>
+      <p class="hero-quote" data-hero-item data-i18n="hero.quote">אם זה דורש חיבור לרשת, התקנות מסובכות או ממשק באנגלית – זה כנראה לא פה.</p>
+      <div class="hero-cta" data-hero-item>
+        <a class="btn btn-primary" href="#work"><span data-i18n="hero.cta">לעבודות</span><svg class="i"><use href="#i-down"/></svg></a>
+        <a class="btn btn-ghost" href="https://github.com/BeniaBot"><svg class="i"><use href="#i-github"/></svg><bdi>GitHub</bdi></a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ MARQUEE ============ -->
+  <div class="marquee" aria-hidden="true">
+    <div class="marquee-track" data-marquee>
+      <div class="marquee-group">
+        <span data-i18n="mq.1">בלי התקנה</span><i>✦</i>
+        <span data-i18n="mq.2">בלי אינטרנט</span><i>✦</i>
+        <span data-i18n="mq.3">עברית מלאה</span><i>✦</i>
+        <span data-i18n="mq.4">קובץ אחד</span><i>✦</i>
+        <span data-i18n="mq.5">אופליין קודם</span><i>✦</i>
+        <span data-i18n="mq.6">ויב קודינג</span><i>✦</i>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ INTRO / THE SPLIT ============ -->
+  <section class="intro wrap" id="work" aria-labelledby="intro-title">
+    <p class="eyebrow" data-reveal data-i18n="intro.eyebrow">שלושה אגפים</p>
+    <h2 class="intro-text" id="intro-title" data-reveal data-i18n="intro.text">הכלים הרציניים, האגף הציני, ו-<bdi>AI: Absent Intelligence</bdi>. <span class="hl" data-annotate="underline">מופרדים בכוונה</span>, כדי שאף בדיחה לא תטעה אתכם לגבי רמת העבודה.</h2>
+    <ol class="wing-index">
+      <li data-reveal><a href="#tools" class="wi" style="--a: var(--c-tools)"><span class="wi-num mono">01</span><svg class="i wi-ic"><use href="#i-zap"/></svg><span class="wi-name" data-i18n="tools.title">כלים רציניים</span><svg class="i wi-go"><use href="#i-down"/></svg></a></li>
+      <li data-reveal><a href="#cynic" class="wi" style="--a: var(--c-cynic)"><span class="wi-num mono">02</span><svg class="i wi-ic"><use href="#i-drama"/></svg><span class="wi-name" data-i18n="cynic.title">האגף הציני</span><svg class="i wi-go"><use href="#i-down"/></svg></a></li>
+      <li data-reveal><a href="#ai" class="wi" style="--a: var(--c-ai)"><span class="wi-num mono">03</span><svg class="i wi-ic"><use href="#i-brain"/></svg><span class="wi-name"><bdi>AI: Absent Intelligence</bdi></span><svg class="i wi-go"><use href="#i-down"/></svg></a></li>
+    </ol>
+  </section>
+
+  <!-- ============ WING 1: TOOLS ============ -->
+  <section class="wing" id="tools" data-wing="tools" aria-labelledby="tools-title">
+    <div class="wrap">
+      <header class="wing-head">
+        <p class="wing-num mono" data-reveal><svg class="i"><use href="#i-zap"/></svg>01</p>
+        <h2 class="wing-title" id="tools-title" data-split data-i18n="tools.title">כלים רציניים</h2>
+        <p class="wing-sub" data-reveal data-i18n="tools.sub">נכתבו מאפס, בפרפקציוניזם קפדני ובלי פשרות.</p>
+      </header>
+
+      <div class="bento bento-tools">
+
+        <article class="card card-feature" data-card data-reveal>
+          <figure class="shot" data-tilt-in>
+            <img src="assets/img/subtext-1200.webp" srcset="assets/img/subtext-720.webp 720w, assets/img/subtext-1200.webp 1200w"
+                 data-en-src="assets/img/subtext-en-1200.webp" data-en-srcset="assets/img/subtext-en-720.webp 720w, assets/img/subtext-en-1200.webp 1200w"
+                 sizes="(min-width: 1000px) 720px, 92vw" width="1200" height="832" loading="lazy" decoding="async"
+                 alt="מסך העבודה: רשימת הכתוביות, תצוגה מקדימה וציר הזמן" data-i18n-alt="subtext.alt">
+          </figure>
+          <div class="card-body">
+            <div class="card-meta"><img class="app-ic" src="assets/img/ic-subtext.webp" width="40" height="40" alt=""><span class="tag mono"><bdi>Windows</bdi></span></div>
+            <h3 class="card-title"><a class="stretched" href="https://github.com/BeniaBot/subtitle-studio"><span data-i18n="subtext.name">אולפן הכתוביות</span></a> <span class="alt-name mono"><bdi>Subtext</bdi></span></h3>
+            <p class="card-desc" data-i18n="subtext.desc">עורך כתוביות מלא לווינדוס. 0 התקנות, 0 אינטרנט, עברית נקייה.</p>
+          </div>
+        </article>
+
+        <article class="card" data-card data-reveal>
+          <div class="viz viz-flow" aria-hidden="true">
+            <span class="node"><svg class="i"><use href="#i-globe"/></svg></span>
+            <span class="wire"></span>
+            <span class="node node-mid"><svg class="i"><use href="#i-usb"/></svg></span>
+            <span class="wire"></span>
+            <span class="node"><svg class="i"><use href="#i-offline"/></svg></span>
+          </div>
+          <div class="card-body">
+            <div class="card-meta"><img class="app-ic" src="assets/img/ic-winapps.webp" width="40" height="40" alt=""><span class="tag mono"><bdi>Windows</bdi></span></div>
+            <h3 class="card-title"><a class="stretched" href="https://github.com/BeniaBot/winapps-offline" data-i18n="winapps.name">חנות אפליקציות אופליין</a></h3>
+            <p class="card-desc" data-i18n="winapps.desc">קטלוג מתקינים מלאים למחשב מנותק. מתקין אחד, דיסק-און-קי, וזהו.</p>
+            <div class="card-actions"><a class="pill" href="https://beniabot.github.io/winapps-offline/"><svg class="i"><use href="#i-globe"/></svg><span data-i18n="act.catalog">לקטלוג</span></a></div>
+          </div>
+        </article>
+
+        <article class="card" data-card data-reveal>
+          <div class="viz viz-rooms" aria-hidden="true">
+            <div class="floor">
+              <div class="room"><b class="mono">401</b><i class="g1"></i><i class="g2"></i><i class="g1"></i></div>
+              <div class="room"><b class="mono">402</b><i class="g3"></i><i class="g3"></i></div>
+              <div class="room"><b class="mono">403</b><i class="g2"></i><i class="g1"></i><i class="g2"></i></div>
+              <div class="corridor"></div>
+              <div class="room"><b class="mono">404</b><i class="g2"></i><i class="g3"></i></div>
+              <div class="room"><b class="mono">405</b><i class="g1"></i><i class="g1"></i><i class="g3"></i></div>
+              <div class="room"><b class="mono">406</b><i class="g3"></i><i class="g2"></i></div>
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="card-meta"><span class="emoji" aria-hidden="true">🐺🐑🥬</span><span class="tag mono">HTML</span></div>
+            <h3 class="card-title"><a class="stretched" href="https://github.com/BeniaBot/wolf-sheep-cabbage" data-i18n="wsc.name">שיבוץ חדרים לפנימייה</a></h3>
+            <p class="card-desc" data-i18n="wsc.desc">150 בחורים, עשרות חדרים, וכללים של מי לא ישן עם מי. לחיצה אחת משבצת את כולם ומדפיסה את דף הקומה.</p>
+            <div class="card-actions"><a class="pill" href="https://beniabot.github.io/wolf-sheep-cabbage/"><svg class="i"><use href="#i-play"/></svg><span data-i18n="act.open">לתוכנה</span></a></div>
+          </div>
+        </article>
+
+        <article class="card" data-card data-reveal>
+          <div class="viz viz-term" aria-hidden="true">
+            <div class="term-bar" dir="ltr"><span class="mono">C:\&gt; Csharf.bat</span><span class="win"><i></i><i></i><i></i></span></div>
+            <div class="term-body">
+              <p class="t-line"><span class="t-k mono">1</span><span data-i18n="cs.l1">מצב ביצועים גבוהים</span></p>
+              <p class="t-line"><span class="t-k mono">2</span><span data-i18n="cs.l2">פינוי שטח וניקוי מערכת</span></p>
+              <p class="t-line"><span class="t-k mono">3</span><span data-i18n="cs.l3">תיקון קבצי מערכת</span></p>
+              <p class="t-line t-ok"><span class="t-k mono">✓</span><span data-i18n="cs.ok">בוצע. חוזר לתפריט</span><span class="caret"></span></p>
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="card-meta"><span class="tag mono"><bdi>Windows</bdi></span><span class="tag mono">.bat</span></div>
+            <h3 class="card-title"><a class="stretched" href="https://github.com/BeniaBot/Csharf"><bdi>Csharf</bdi></a></h3>
+            <p class="card-desc" data-i18n="cs.desc">כלי טוויקים ותחזוקה ל-<bdi>Windows</bdi> בקובץ יחיד.</p>
+          </div>
+        </article>
+
+        <article class="card" data-card data-reveal>
+          <div class="viz viz-nicks" aria-hidden="true">
+            <div class="nick"><span class="av"></span><span class="bar w70"></span><span class="bar w30 soft"></span></div>
+            <div class="nick"><span class="av"></span><span class="bar w55"></span><span class="bar w40 soft"></span></div>
+            <div class="nick"><span class="av"></span><span class="bar w80"></span><span class="bar w20 soft"></span></div>
+            <span class="local"><svg class="i"><use href="#i-lock"/></svg><span data-i18n="tk.local">מקומי</span></span>
+          </div>
+          <div class="card-body">
+            <div class="card-meta"><img class="app-ic" src="assets/img/ic-tiknick.webp" width="40" height="40" alt=""><span class="tag mono"><bdi>Windows</bdi></span></div>
+            <h3 class="card-title"><a class="stretched" href="https://github.com/BeniaBot/tiknick"><span data-i18n="tk.name">טיקניק</span></a></h3>
+            <p class="card-desc" data-i18n="tk.desc">ניהול ומעקב אחר ניקים בפורומים. הכול נשמר מקומית במחשב.</p>
+          </div>
+        </article>
+
+        <article class="card card-web" data-card data-reveal>
+          <div class="viz viz-web" aria-hidden="true">
+            <div class="mini-browser" dir="ltr">
+              <div class="mb-bar"><i></i><i></i><i></i><span class="mb-url mono">beniabot.github.io</span></div>
+              <div class="mb-body"><span class="mb-h"></span><span class="mb-l"></span><span class="mb-l short"></span><span class="mb-grid"><i></i><i></i><i></i></span></div>
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="card-meta"><span class="tag mono"><bdi>Web</bdi></span></div>
+            <h3 class="card-title" data-i18n="web.name">אתרים ודפי נחיתה</h3>
+            <p class="card-desc" data-i18n="web.desc">בונה גם אתרים ודפי נחיתה. רובם ללקוחות, ולכן לא כאן. <strong>הדף הזה כן.</strong></p>
+          </div>
+        </article>
+
+        <article class="card card-plain" data-card data-reveal>
+          <div class="card-body">
+            <div class="card-meta"><span class="tag mono"><bdi>Windows</bdi></span><span class="tag mono"><bdi>OpenVPN</bdi></span></div>
+            <h3 class="card-title"><a class="stretched mono" href="https://github.com/BeniaBot/proton-ovpn-kit"><bdi>ovpn-kit</bdi></a></h3>
+            <p class="card-desc" data-i18n="ov.desc">חבילת <bdi dir="ltr">OpenVPN</bdi> לווינדוס, סקריפטים בלבד: <bdi dir="ltr">tun</bdi> עם <bdi dir="ltr">AES-256-GCM</bdi> ו-<bdi dir="ltr">tls-crypt</bdi>, <bdi dir="ltr">management interface</bdi> על פורט <bdi dir="ltr">loopback</bdi> דינמי, אישורים מוצפנים ב-<bdi dir="ltr">DPAPI</bdi>, <bdi dir="ltr">pull-filter</bdi> ו-<bdi dir="ltr">redirect-gateway def1</bdi> ל-<bdi dir="ltr">IPv4</bdi> בלבד, נטרול <bdi dir="ltr">ms_tcpip6</bdi> על המתאמים הפיזיים, ניקוי נתיבי <bdi dir="ltr">0/1</bdi> ו-<bdi dir="ltr">128/1</bdi>, ו-<bdi dir="ltr">failover</bdi> מ-<bdi dir="ltr">UDP</bdi> ל-<bdi dir="ltr">TCP 443</bdi>.</p>
+          </div>
+        </article>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ WING 2: CYNICAL ============ -->
+  <section class="wing" id="cynic" data-wing="cynic" aria-labelledby="cynic-title">
+    <div class="wrap">
+      <header class="wing-head">
+        <p class="wing-num mono" data-reveal><svg class="i"><use href="#i-drama"/></svg>02</p>
+        <h2 class="wing-title" id="cynic-title" data-split data-i18n="cynic.title">האגף הציני</h2>
+        <p class="wing-sub" data-reveal data-i18n="cynic.sub">ציניות היא רכיב בסיסי בבני-ברקי הממוצע. מי שזה לא מצחיק אותו – כנראה פשוט לא משלנו.</p>
+      </header>
+
+      <div class="bento bento-cynic">
+
+        <article class="card" data-card data-reveal>
+          <div class="viz viz-bypass" aria-hidden="true">
+            <div class="bp-row"><span class="bp-label" data-i18n="nf.label">עוקף סינון…</span><span class="bp-pct mono"><span data-bp-num>99</span>%</span></div>
+            <div class="bp-bar"><i data-bp-bar></i></div>
+            <p class="bp-out" data-bp-out data-i18n="nf.out">עבדנו עליך.</p>
+          </div>
+          <div class="card-body">
+            <div class="card-meta"><span class="tag mono"><bdi>Windows</bdi></span></div>
+            <h3 class="card-title"><a class="stretched" href="https://github.com/BeniaBot/not-free"><bdi>not-free</bdi></a></h3>
+            <p class="card-desc" data-i18n="nf.desc">עוקף סינון שלא עוקף כלום.</p>
+          </div>
+        </article>
+
+        <article class="card" data-card data-reveal>
+          <div class="viz viz-2049" aria-hidden="true">
+            <div class="tiles" dir="ltr">
+              <span class="tile v2">2</span><span class="tile v0">0</span><span class="tile v4">4</span><span class="tile v9" data-tile-last>9<span class="tile-prev" data-tile-prev>8</span></span>
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="card-meta"><img class="app-ic" src="assets/img/ic-2049.webp" width="40" height="40" alt=""><span class="tag mono"><bdi>Web · Windows</bdi></span></div>
+            <h3 class="card-title"><a class="stretched" href="https://github.com/BeniaBot/2049"><bdi>2049</bdi></a></h3>
+            <p class="card-desc" data-i18n="g2049.desc">המשחק המוכר, בתוספת מקשי עזרה נסתרים.</p>
+            <div class="card-actions"><a class="pill" href="https://beniabot.github.io/2049/"><svg class="i"><use href="#i-play"/></svg><span data-i18n="act.play">לשחק</span></a></div>
+          </div>
+        </article>
+
+        <article class="card" data-card data-reveal>
+          <div class="viz viz-sides" aria-hidden="true">
+            <div class="sides">
+              <span class="side side-a" data-i18n="ho.a">חוסמים</span>
+              <span class="side side-b" data-i18n="ho.b">מפנים</span>
+              <span class="knob" data-knob></span>
+            </div>
+            <span class="siren s1"></span><span class="siren s2"></span>
+          </div>
+          <div class="card-body">
+            <div class="card-meta"><span class="tag mono">3D</span><span class="tag tag-warn" data-i18n="ho.badge">גרסה נגזרת · המנוע לא שלי</span></div>
+            <h3 class="card-title"><a class="stretched" href="https://github.com/BeniaBot/hosmim-o-mefanim" data-i18n="ho.name">חוסמים או מפנים</a></h3>
+            <p class="card-desc" data-i18n="ho.desc">סימולטור הפגנות דו-צדדי בתלת-ממד. הקרדיט המלא ליוצר המקורי נמצא במאגר.</p>
+          </div>
+        </article>
+
+        <article class="card" data-card data-reveal>
+          <div class="viz viz-phone" aria-hidden="true">
+            <div class="phone">
+              <span class="ph-ic"><svg class="i"><use href="#i-hourglass"/></svg></span>
+              <span class="ph-l" data-i18n="bt.l">העברת זמן</span>
+              <span class="ph-n"><b class="mono" data-bt-n>60</b><small data-i18n="bt.u">דק׳</small></span>
+              <span class="ph-btn" data-i18n="bt.btn">העברה</span>
+              <span class="ph-done" data-bt-done><span data-i18n="bt.done">הועבר. אין החזרות.</span></span>
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="card-meta"><span class="tag mono"><bdi>Web</bdi></span></div>
+            <h3 class="card-title"><a class="stretched" href="https://github.com/BeniaBot/time-bit"><span data-i18n="bt.name">זמן־ביט</span></a> <span class="alt-name mono" data-i18n="bt.alt"><bdi>biTime</bdi></span></h3>
+            <p class="card-desc" data-i18n="bt.desc">העברת זמן בלחיצה אחת. יש לך זמן פנוי? יש מי שאין לו. מיידית, סופית ובלתי הפיכה.</p>
+            <div class="card-actions"><a class="pill" href="https://beniabot.github.io/time-bit/"><svg class="i"><use href="#i-play"/></svg><span data-i18n="act.try">לנסות</span></a></div>
+          </div>
+        </article>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ WING 3: AI ============ -->
+  <section class="wing" id="ai" data-wing="ai" aria-labelledby="ai-title">
+    <div class="wrap">
+      <header class="wing-head">
+        <p class="wing-num mono" data-reveal><svg class="i"><use href="#i-brain"/></svg>03</p>
+        <h2 class="wing-title wing-title-ai" id="ai-title" dir="ltr" data-scramble-title>AI: Absent Intelligence</h2>
+        <p class="wing-sub" data-reveal data-i18n="ai.sub">כולם מדברים איתך. אף אחד לא בבית.</p>
+      </header>
+
+      <div class="bento bento-ai">
+
+        <article class="card card-feature" data-card data-reveal>
+          <figure class="shot" data-tilt-in>
+            <img src="assets/img/eliza-1100.webp" srcset="assets/img/eliza-640.webp 640w, assets/img/eliza-1100.webp 1100w"
+                 sizes="(min-width: 1000px) 720px, 92vw" width="1100" height="818" loading="lazy" decoding="async"
+                 alt="אלייזה בעברית: שיחה במסוף ירוק" data-i18n-alt="eliza.alt">
+          </figure>
+          <div class="card-body">
+            <div class="card-meta"><span class="tag mono"><bdi>Windows</bdi></span><span class="tag mono">1966</span></div>
+            <h3 class="card-title"><a class="stretched" href="https://github.com/BeniaBot/eliza" data-i18n="eliza.name">אלייזה</a></h3>
+            <p class="card-desc" data-i18n="eliza.desc">ב-1966 אנשים סיפרו לה סודות, ובפנים היו רק כמה עשרות כללים שאדם כתב ביד. משוחזרת לווינדוס וזהה תו בתו לשיחות המקוריות, עם תסריט עברי מקורי ושי-בוטים על אותו מנוע.</p>
+            <div class="card-actions"><a class="pill" href="https://github.com/BeniaBot/eliza/releases/latest"><svg class="i"><use href="#i-download"/></svg><span data-i18n="act.download">להורדה</span></a></div>
+          </div>
+        </article>
+
+        <article class="card" data-card data-reveal>
+          <div class="viz viz-lavan" aria-hidden="true">
+            <img class="lavan-logo" src="assets/img/ic-lavan.webp" width="88" height="88" alt="">
+            <div class="params"><b class="mono" data-params>97.4T</b><span data-i18n="lv.params">פרמטרים</span></div>
+          </div>
+          <div class="card-body">
+            <div class="card-meta"><span class="tag mono"><bdi>Web · Windows</bdi></span></div>
+            <h3 class="card-title"><a class="stretched" href="https://github.com/BeniaBot/lavan-haarami" data-i18n="lv.name">לבן הארמי</a></h3>
+            <p class="card-desc" data-i18n="lv.desc"><bdi>AI</bdi> מקומי פורץ דרך. 97.4 טריליון פרמטרים, רץ בלי <bdi>GPU</bdi> ובלי קשר למציאות.</p>
+            <div class="card-actions"><a class="pill" href="https://beniabot.github.io/lavan-haarami/"><svg class="i"><use href="#i-play"/></svg><span data-i18n="act.see">להתרשמות</span></a></div>
+          </div>
+        </article>
+
+        <article class="card" data-card data-reveal>
+          <div class="viz viz-word" aria-hidden="true">
+            <div class="page">
+              <p class="w-q"><span data-type data-i18n="tr.q">מי אתה</span><span class="caret"></span></p>
+              <p class="w-a" data-i18n="tr.a">העוזר הדיגיטלי החדש שלך! תשאל אותי כל דבר. :)</p>
+              <div class="ttt" dir="ltr"><i>X</i><i>O</i><i></i><i></i><i>X</i><i></i><i>O</i><i></i><i>X</i></div>
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="card-meta"><span class="tag mono"><bdi>Word</bdi></span></div>
+            <h3 class="card-title"><a class="stretched" href="https://github.com/BeniaBot/Tom-Riddles-Diary" data-i18n="tr.name">היומן של תום רידל</a></h3>
+            <p class="card-desc" data-i18n="tr.desc">צ'אט ואיקס-עיגול בלתי מנוצח בתוך קובץ <bdi>Word</bdi>. בלי מאקרו, וכל 1,120 מצבי הלוח ממופים מראש.</p>
+          </div>
+        </article>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ VIBE CODING ============ -->
+  <section class="vibe" id="vibe" data-wing="vibe" aria-labelledby="vibe-title">
+    <div class="wrap">
+      <p class="eyebrow" id="vibe-title" data-reveal><svg class="i"><use href="#i-bot"/></svg><span data-i18n="vibe.eyebrow">וכן, הכול בוויב קודינג</span></p>
+      <p class="vibe-big" data-scrub data-i18n="vibe.big">כל שורה כאן נכתבה מול <bdi>AI</bdi>. מי שחושב שזה קיצור דרך – שינסה להביא ככה מוצר עד קו הסיום.</p>
+      <div class="vibe-grid">
+        <p class="vibe-lead" data-reveal data-i18n="vibe.lead">ה-<bdi>AI</bdi> ייתן לך בדיוק את מה שביקשת. לכן צריך להגיע עם שתי תשובות מוכנות:</p>
+        <ol class="answers">
+          <li data-reveal><span class="ans-n mono">1</span><span data-i18n="vibe.a1">מה בדיוק רוצים.</span></li>
+          <li data-reveal><span class="ans-n mono">2</span><span data-i18n="vibe.a2">מה הדרך הנכונה לבנות את זה.</span></li>
+        </ol>
+        <p class="vibe-note" data-reveal data-i18n="vibe.note">בלי השנייה מקבלים משהו שעובד בהדגמה ומתפרק אחריה. וזה בדיוק מה שמלמד: אתה נאלץ להבין את הדרך לפני שאתה מבקש, ולזהות ברגע שקיבלת משהו אחר.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ OUTRO ============ -->
+  <section class="outro" aria-labelledby="outro-title">
+    <div class="wrap">
+      <p class="eyebrow" data-reveal data-i18n="outro.eyebrow">שורה תחתונה</p>
+      <p class="outro-big" id="outro-title" data-reveal data-i18n="outro.big">בדיחה טובה דורשת קוד מדויק לא פחות מכלי עבודה. אחרת זו פשוט אפליקציה שבורה.</p>
+      <p class="outro-sign" data-reveal data-i18n="outro.sign">לכן הבדיחות כאן נבנו <span class="hl" data-annotate="highlight">באותה קפדנות</span> כמו הכלים.</p>
+    </div>
+  </section>
+
+</main>
+
+<footer class="footer">
+  <div class="wrap footer-inner">
+    <div class="footer-brand">
+      <svg class="brand-mark" viewBox="0 0 64 64" aria-hidden="true"><path d="M32 13v7" stroke="currentColor" stroke-width="4" stroke-linecap="round"/><circle cx="32" cy="11" r="3.5" fill="currentColor"/><rect x="13" y="21" width="38" height="29" rx="9" fill="none" stroke="currentColor" stroke-width="4"/><circle class="eye" cx="25" cy="35" r="3.6"/><circle class="eye" cx="39" cy="35" r="3.6"/></svg>
+      <span><bdi>BeniaBot</bdi> · <span data-i18n="foot.made">גם הדף הזה: ויב קודינג.</span></span>
+    </div>
+    <nav class="footer-links" aria-label="איפה למצוא אותי" data-i18n-aria="foot.find">
+      <span class="footer-label" data-i18n="foot.find">איפה למצוא אותי</span>
+      <a href="https://mitmachim.top/user/%D7%91%D7%A0%D7%99%D7%9E%D7%99%D7%9F-%D7%9E%D7%97%D7%A9%D7%91%D7%99%D7%9D" data-i18n="foot.mm">מתמחים טופ</a>
+      <a href="https://github.com/BeniaBot"><bdi>GitHub</bdi></a>
+      <a href="https://github.com/BeniaBot/BeniaBot/blob/main/site/DESIGN.md" data-i18n="foot.design">איך הדף בנוי</a>
+    </nav>
+  </div>
+</footer>
+
+<script src="vendor/gsap/gsap.min.js" defer></script>
+<script src="vendor/gsap/ScrollTrigger.min.js" defer></script>
+<script src="vendor/gsap/SplitText.min.js" defer></script>
+<script src="vendor/gsap/ScrambleTextPlugin.min.js" defer></script>
+<script src="vendor/lenis/lenis.min.js" defer></script>
+<script src="vendor/rough-notation/rough-notation.iife.js" defer></script>
+<script src="assets/js/i18n.js" defer></script>
+<script src="assets/js/main.js" defer></script>
+<script src="assets/js/hero-gl.js" type="module"></script>
+</body>
+</html>
