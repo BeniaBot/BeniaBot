@@ -74,7 +74,7 @@ html {
   background: var(--bg);
   -webkit-text-size-adjust: 100%;
   scroll-behavior: smooth;
-  scroll-padding-top: calc(var(--nav-h) + 12px);
+  scroll-padding-top: var(--nav-h);
 }
 body {
   margin: 0;
@@ -354,7 +354,7 @@ button { font: inherit; color: inherit; }
 .hl.is-in { background-size: 100% .07em; }
 
 /* ================= WINGS ================= */
-.wing { position: relative; padding-top: var(--section); scroll-margin-top: var(--nav-h); }
+.wing { position: relative; padding-top: var(--section); }
 .wing-head { margin-bottom: 40px; }
 .wing-num { display: inline-flex; align-items: center; gap: 10px; color: var(--accent); font-size: var(--fs-sm); font-weight: 600; margin-bottom: 14px; font-variant-numeric: tabular-nums; }
 .wing-num .i { width: 22px; height: 22px; }
@@ -516,8 +516,11 @@ button { font: inherit; color: inherit; }
   .grid:has(.card:hover) .card:not(:hover) .card-inner { opacity: .62; }
   html:not(.tilt-on) .card:hover .card-inner { transform: translateY(-6px) scale(1.025); }
   html:not(.tilt-on) .card-inner { transition: transform .5s var(--spring), border-color .35s, box-shadow .45s, opacity .35s; }
-  .card { z-index: 0; }
-  .card:hover { z-index: 2; }
+  /* The card stays on top while it settles back, so its shadow doesn't slip under the next one. */
+  .card { z-index: 0; transition: z-index 0s .6s; }
+  .card:hover { z-index: 2; transition-delay: 0s; }
+  /* Perspective on the card, not on the transform, so a resting card has no 3D transform and its text stays crisp. */
+  html.tilt-on .card { perspective: 900px; }
 }
 @media (hover: none) {
   .card:active .card-inner { transform: scale(.985); transition: transform .12s; }
@@ -749,7 +752,7 @@ button { font: inherit; color: inherit; }
 .ttt i:nth-child(3n) { border-right: 0; }
 
 /* ================= VIBE CODING ================= */
-.vibe { padding-top: var(--section); scroll-margin-top: var(--nav-h); }
+.vibe { padding-top: var(--section); }
 .vibe-inner > * { max-width: 46rem; }
 .vibe-big { font-size: var(--fs-2xl); font-weight: 600; line-height: 1.22; letter-spacing: -.01em; text-wrap: pretty; }
 /* Inline, so a full stop after a Latin word can't start a line of its own. */
@@ -876,3 +879,8 @@ button { font: inherit; color: inherit; }
   .knob { translate: 0 0; }
   .scroll-cue { display: none; }
 }
+
+/* Sections focused by an in-page link don't need a ring; their content does. */
+[tabindex="-1"]:focus { outline: none; }
+/* If the motion layer gives up, nothing may stay unclickable. */
+.no-anim [data-reveal] { pointer-events: auto !important; }

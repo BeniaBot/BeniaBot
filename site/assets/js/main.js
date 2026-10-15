@@ -156,7 +156,7 @@
       if (lenis) { lenis.destroy(); lenis = null; }
       if (window.gsap) {
         gsap.killTweensOf('*');
-        gsap.set('[data-reveal], [data-split], [data-split-hero], [data-hero-item], [data-scramble-title], .card-inner', { clearProps: 'opacity,visibility,transform' });
+        gsap.set('[data-reveal], [data-split], [data-split-hero], [data-hero-item], [data-scramble-title], .card-inner', { clearProps: 'opacity,visibility,transform,pointerEvents' });
       }
       root.classList.remove('tilt-on');
     } catch (e) { /* the .no-anim class below is the real safety net */ }
@@ -171,8 +171,18 @@
       var target = id === '#top' ? 0 : document.querySelector(id);
       if (target === null) return;
       e.preventDefault();
-      var navH = $('[data-nav]').offsetHeight;
-      lenis.scrollTo(target, { offset: id === '#top' ? 0 : -navH + 1, duration: 1.3 });
+      if (target === 0) { lenis.scrollTo(0, { duration: 1.3 }); return; }
+      // The nav's height comes from scroll-padding-top in the CSS, which Lenis
+      // reads too, so no offset here. Afterwards behave like a native anchor:
+      // the hash in the address bar, and Tab continues from the section.
+      try { history.pushState(null, '', id); } catch (err) {}
+      lenis.scrollTo(target, {
+        duration: 1.3,
+        onComplete: function () {
+          if (!target.hasAttribute('tabindex')) target.setAttribute('tabindex', '-1');
+          target.focus({ preventScroll: true });
+        }
+      });
     });
   }
 
@@ -210,18 +220,19 @@
     var els = $$('[data-reveal]');
     // Opacity only, never visibility: what is still waiting to rise must stay
     // reachable by Tab and by screen readers.
-    gsap.set(els, { opacity: 0, y: 28 });
+    // Not clickable while invisible, or a blank strip could open a project.
+    gsap.set(els, { opacity: 0, y: 28, pointerEvents: 'none' });
     ScrollTrigger.batch(els, {
       start: 'top 90%',
       once: true,
       onEnter: function (batch) {
-        gsap.to(batch, { opacity: 1, y: 0, duration: 0.9, ease: 'power3.out', stagger: 0.08, overwrite: true });
+        gsap.to(batch, { opacity: 1, y: 0, pointerEvents: 'auto', duration: 0.9, ease: 'power3.out', stagger: 0.08, overwrite: true });
       }
     });
     // Tabbing into something that has not risen yet shows it at once.
     document.addEventListener('focusin', function (e) {
       var el = e.target.closest && e.target.closest('[data-reveal]');
-      if (el && parseFloat(getComputedStyle(el).opacity) < 1) gsap.to(el, { opacity: 1, y: 0, duration: 0.3, overwrite: true });
+      if (el && parseFloat(getComputedStyle(el).opacity) < 1) gsap.to(el, { opacity: 1, y: 0, pointerEvents: 'auto', duration: 0.3, overwrite: true });
     });
   }
 
@@ -310,7 +321,6 @@
       var offs = [];
       $$('[data-card]').forEach(function (card) {
         var inner = $('.card-inner', card);
-        gsap.set(inner, { transformPerspective: 900 });
         var q = function (el, prop, d) { return gsap.quickTo(el, prop, { duration: d || 0.5, ease: 'power3' }); };
         var rx = q(inner, 'rotationX');
         var ry = q(inner, 'rotationY');
@@ -395,11 +405,14 @@
           if (d.tl.isActive()) return;
           d.tl.progress(1).kill();
         }
+        d.at = performance.now();
         d.tl = build(viz);
       };
+      // A sweep of the mouse across the grid shouldn't restart every demo it touches.
+      d.hover = function () { if (!d.at || performance.now() - d.at > 4000) d.play(); };
       d.finish = function () { if (d.tl) d.tl.progress(1); };
       ScrollTrigger.create({ trigger: card, start: 'top 90%', once: true, onEnter: d.play });
-      if (finePointer) card.addEventListener('mouseenter', d.play);
+      if (finePointer) card.addEventListener('mouseenter', d.hover);
       demos.push(d);
     });
   }

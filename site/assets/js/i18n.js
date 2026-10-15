@@ -168,14 +168,20 @@
   }
 
   function swap(lang) {
+    pending = null;
     document.dispatchEvent(new CustomEvent('bb:beforelang', { detail: { lang: lang } }));
     apply(lang);
     remember(lang);
     document.dispatchEvent(new CustomEvent('bb:lang', { detail: { lang: lang } }));
   }
 
+  // The language the page is heading to. During a cross-fade it differs from
+  // `current` for a moment, and quick repeat clicks must count from it.
+  var pending = null;
+
   function set(lang) {
-    if (lang === current) return;
+    if (lang === (pending || current)) return;
+    pending = lang;
     // A soft cross-fade where the browser can do it; an instant swap elsewhere.
     var calm = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     if (document.startViewTransition && !calm) {
@@ -185,7 +191,7 @@
   }
 
   document.querySelectorAll('[data-lang-toggle]').forEach(function (btn) {
-    btn.addEventListener('click', function () { set(current === 'en' ? 'he' : 'en'); });
+    btn.addEventListener('click', function () { set((pending || current) === 'en' ? 'he' : 'en'); });
   });
 
   window.BB_I18N = {
