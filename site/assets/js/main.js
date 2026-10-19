@@ -235,30 +235,52 @@
 
   // The title's letters thicken toward the pointer and thin out away from it,
   // through the serif's weight axis. Nothing moves until the pointer is near.
+  // Weights move in steps of 20 and are written only when the step changes:
+  // every new weight means the huge letters are drawn again.
   function heroWeight(title) {
     if (!finePointer) return;
     var section = title.closest('.hero') || title.parentNode;
-    var REST = 560, MIN = 470, MAX = 880, R = 300;
-    var setters = new Map();
-    function setter(c) {
-      var s = setters.get(c);
-      if (!s) { s = gsap.quickTo(c, '--wght', { duration: 0.6, ease: 'power3' }); setters.set(c, s); }
-      return s;
+    var REST = 560, MIN = 470, MAX = 880, R = 300, STEP = 20;
+    var letters = null;          // [{ c, x, y, now, goal, shown }]
+    var running = false;
+    function measure() {
+      var prev = new Map((letters || []).map(function (l) { return [l.c, l]; }));
+      letters = $$('.c', title).map(function (c) {
+        var r = c.getBoundingClientRect();
+        var old = prev.get(c);
+        return { c: c, x: r.left + r.width / 2, y: r.top + r.height / 2,
+                 now: old ? old.now : REST, goal: old ? old.goal : REST, shown: old ? old.shown : REST };
+      });
     }
-    function chars() { return $$('.c', title); }
+    function tick() {
+      var moving = false;
+      letters.forEach(function (l) {
+        l.now += (l.goal - l.now) * 0.16;
+        if (Math.abs(l.goal - l.now) < 1) l.now = l.goal; else moving = true;
+        var w = Math.round(l.now / STEP) * STEP;
+        if (w !== l.shown) { l.shown = w; l.c.style.setProperty('--wght', w); }
+      });
+      if (!moving) { gsap.ticker.remove(tick); running = false; }
+    }
+    function start() { if (!running) { running = true; gsap.ticker.add(tick); } }
+    function stale() { if (letters) measure(); }
+    window.addEventListener('scroll', stale, { passive: true });
+    window.addEventListener('resize', stale);
+    document.addEventListener('bb:lang', function () { letters = null; });
     section.addEventListener('pointermove', function (e) {
       if (e.pointerType !== 'mouse') return;
-      chars().forEach(function (c) {
-        var r = c.getBoundingClientRect();
-        var d = Math.hypot(e.clientX - (r.left + r.width / 2), e.clientY - (r.top + r.height / 2));
-        var k = Math.max(0, 1 - d / R);
-        setter(c)(MIN + (MAX - MIN) * k * k);
+      if (!letters || !letters.length || !letters[0].c.isConnected) measure();
+      letters.forEach(function (l) {
+        var k = Math.max(0, 1 - Math.hypot(e.clientX - l.x, e.clientY - l.y) / R);
+        l.goal = MIN + (MAX - MIN) * k * k;
       });
+      start();
     });
     section.addEventListener('pointerleave', function () {
-      chars().forEach(function (c) { setter(c)(REST); });
+      if (!letters) return;
+      letters.forEach(function (l) { l.goal = REST; });
+      start();
     });
-    document.addEventListener('bb:lang', function () { setters.clear(); });
   }
 
   function reveals() {
