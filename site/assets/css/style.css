@@ -33,20 +33,37 @@ html.lenis body {
 .mf-cursor{position:fixed;top:0;left:0;z-index:250;direction:ltr;contain:layout style size;pointer-events:none;transition:opacity .3s,color .4s}.mf-cursor:before{content:"";position:absolute;top:-24px;left:-24px;display:block;width:48px;height:48px;transform:scale(0.2);background:currentColor;border-radius:50%;transition:transform .25s ease-in-out,opacity .1s}.mf-cursor.-inverse{color:#fff}@supports(mix-blend-mode: exclusion){.mf-cursor.-exclusion{mix-blend-mode:exclusion}.mf-cursor.-exclusion:before{background:#fff}}.mf-cursor.-pointer:before{transform:scale(0.15)}.mf-cursor.-text:before{opacity:.85;transform:scale(1.7)}.mf-cursor.-text.-active:before{transform:scale(1.6);transition-duration:.2s}.mf-cursor.-icon:before{transform:scale(1.5)}.mf-cursor.-icon.-active:before{transform:scale(1.4)}.mf-cursor.-hidden:before{transform:scale(0)}.mf-cursor-text{position:absolute;top:-18px;left:-18px;width:36px;height:36px;display:flex;align-items:center;justify-content:center;transform:scale(0) rotate(10deg);opacity:0;color:#fff;font-size:16px;line-height:20px;text-align:center;transition:opacity .4s,transform .3s}.mf-cursor.-text .mf-cursor-text,.mf-cursor.-icon .mf-cursor-text{opacity:1;transform:scale(1)}.mf-cursor-icon{width:100%;height:100%;object-fit:contain}.mf-cursor-media{position:absolute;width:400px;height:400px;margin:-200px 0 0 -200px}.mf-cursor-media img,.mf-cursor-media video{position:absolute;top:50%;left:50%;transform:translate(-50%, -50%);border-radius:50%}@supports(object-fit: cover){.mf-cursor-media img,.mf-cursor-media video{position:static;width:100%;height:100%;object-fit:cover;transform:translateZ(0)}}.mf-cursor-media-box{position:relative;width:100%;height:100%;overflow:hidden;transform:scale(0) translateZ(0);padding:1px;opacity:0;border-radius:50%;transition:transform .35s,opacity .2s .2s}.mf-cursor.-media .mf-cursor-media-box{opacity:1;transform:scale(0.696);transition-duration:.4s,.4s;transition-delay:0s,0s}
 /* ---- End of vendor styles ---- */
 
+/* Heebo for reading, Frank Ruhl Libre for the big lines (both OFL, licences in vendor/licenses). */
 @font-face {
-  font-family: 'Rubik Variable';
+  font-family: 'Heebo Variable';
   font-style: normal;
   font-display: swap;
-  font-weight: 300 900;
-  src: url(../../vendor/fonts/rubik-hebrew-wght-normal.woff2) format('woff2-variations');
+  font-weight: 100 900;
+  src: url(../../vendor/fonts/heebo-hebrew-wght-normal.woff2) format('woff2-variations');
   unicode-range: U+0307-0308, U+0590-05FF, U+200C-2010, U+20AA, U+25CC, U+FB1D-FB4F;
 }
 @font-face {
-  font-family: 'Rubik Variable';
+  font-family: 'Heebo Variable';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 100 900;
+  src: url(../../vendor/fonts/heebo-latin-wght-normal.woff2) format('woff2-variations');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Frank Ruhl Libre Variable';
   font-style: normal;
   font-display: swap;
   font-weight: 300 900;
-  src: url(../../vendor/fonts/rubik-latin-wght-normal.woff2) format('woff2-variations');
+  src: url(../../vendor/fonts/frank-ruhl-libre-hebrew-wght-normal.woff2) format('woff2-variations');
+  unicode-range: U+0307-0308, U+0590-05FF, U+200C-2010, U+20AA, U+25CC, U+FB1D-FB4F;
+}
+@font-face {
+  font-family: 'Frank Ruhl Libre Variable';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 300 900;
+  src: url(../../vendor/fonts/frank-ruhl-libre-latin-wght-normal.woff2) format('woff2-variations');
   unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
 
@@ -67,8 +84,9 @@ html.lenis body {
   --c-vibe: #a493ff;
   --accent: var(--c-tools);
 
-  --font: 'Rubik Variable', 'Rubik', 'Arial Hebrew', Arial, system-ui, sans-serif;
-  --mono: ui-monospace, 'Cascadia Mono', Consolas, 'Rubik Variable', monospace;
+  --font: 'Heebo Variable', 'Heebo', 'Arial Hebrew', Arial, system-ui, sans-serif;
+  --font-display: 'Frank Ruhl Libre Variable', 'Frank Ruhl Libre', 'Heebo Variable', Georgia, serif;
+  --mono: ui-monospace, 'Cascadia Mono', Consolas, 'Heebo Variable', monospace;
 
   --fs-xs: .8125rem;
   --fs-sm: .9375rem;
@@ -279,10 +297,11 @@ button { font: inherit; color: inherit; }
 }
 .hero-inner { display: flex; flex-direction: column; align-items: center; }
 .hero-title {
+  font-family: var(--font-display);
   font-size: var(--fs-hero);
-  font-weight: 800;
+  font-weight: 560;
   line-height: 1.04;
-  letter-spacing: -.01em;
+  letter-spacing: -.005em;
   text-shadow: 0 4px 40px rgb(0 0 0 / .25);
 }
 [lang="en"] .hero-title { letter-spacing: -.035em; line-height: .98; }
@@ -359,8 +378,9 @@ button { font: inherit; color: inherit; }
 .intro { padding-top: var(--section); }
 .intro-text {
   max-width: 26em;
+  font-family: var(--font-display);
   font-size: var(--fs-2xl);
-  font-weight: 600;
+  font-weight: 450;
   line-height: 1.25;
   text-wrap: balance;
 }
@@ -388,13 +408,6 @@ button { font: inherit; color: inherit; }
 .wi-name { flex: 1; min-width: 0; font-weight: 600; font-size: var(--fs-lg); line-height: 1.3; text-wrap: balance; }
 .wi-num { color: var(--dim); font-size: var(--fs-xs); font-variant-numeric: tabular-nums; }
 
-.hl {
-  color: var(--accent);
-  background: linear-gradient(currentColor 0 0) 0 100% / 0% .07em no-repeat;
-  transition: background-size 1s var(--ease) .2s;
-}
-[dir="rtl"] .hl { background-position: 100% 100%; }
-.hl.is-in { background-size: 100% .07em; }
 
 /* ================= WINGS ================= */
 .wing { position: relative; padding-top: var(--section); }
@@ -402,8 +415,9 @@ button { font: inherit; color: inherit; }
 .wing-num { display: inline-flex; align-items: center; gap: 10px; color: var(--accent); font-size: var(--fs-sm); font-weight: 600; margin-bottom: 14px; font-variant-numeric: tabular-nums; }
 .wing-num .i { width: 22px; height: 22px; }
 .wing-title {
+  font-family: var(--font-display);
   font-size: var(--fs-3xl);
-  font-weight: 800;
+  font-weight: 600;
   line-height: 1.04;
   letter-spacing: -.01em;
 }
@@ -816,7 +830,7 @@ button { font: inherit; color: inherit; }
 /* ================= VIBE CODING ================= */
 .vibe { padding-top: var(--section); }
 .vibe-inner > * { max-width: 46rem; }
-.vibe-big { font-size: var(--fs-2xl); font-weight: 600; line-height: 1.22; letter-spacing: -.01em; text-wrap: pretty; }
+.vibe-big { font-family: var(--font-display); font-size: var(--fs-2xl); font-weight: 450; line-height: 1.22; letter-spacing: -.01em; text-wrap: pretty; }
 /* Inline, so a full stop after a Latin word can't start a line of its own. */
 .vibe-big .w { display: inline !important; will-change: opacity; }
 .vibe-lead { margin-top: 40px; color: var(--muted); font-size: var(--fs-lg); text-wrap: pretty; }
@@ -858,14 +872,14 @@ button { font: inherit; color: inherit; }
 .outro-big {
   max-width: 22em;
   margin-inline: auto;
+  font-family: var(--font-display);
   font-size: var(--fs-2xl);
-  font-weight: 600;
+  font-weight: 500;
   line-height: 1.22;
   text-wrap: balance;
   text-shadow: 0 2px 30px rgb(0 0 0 / .55);
 }
 .outro-sign { margin-top: 24px; color: var(--text); font-size: var(--fs-xl); text-wrap: balance; text-shadow: 0 2px 30px rgb(0 0 0 / .55); }
-.outro-sign .hl { color: var(--c-tools); }
 
 /* ================= FOOTER ================= */
 .footer { border-top: 1px solid var(--line); padding: 32px 0 calc(40px + env(safe-area-inset-bottom)); color: var(--muted); font-size: var(--fs-sm); background: rgb(9 9 12 / .7); }
