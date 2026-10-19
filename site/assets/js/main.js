@@ -131,9 +131,12 @@
     var scrub = $('[data-scrub]');
     if (scrub) splits.push(scrubWords(scrub));
     scrambleTitle();
+    initFlip();
     cardDemos();
     initSwell();
     initCursor();
+    titleRoll();
+    magnetic();
 
     document.addEventListener('bb:beforelang', function () {
       demos.forEach(function (d) { d.finish(); });
@@ -351,6 +354,51 @@
     });
   }
 
+  // Section titles answer the pointer: the words roll over one after another
+  // inside their masks, and the AI title computes itself again.
+  function titleRoll() {
+    if (!finePointer) return;
+    $$('.wing-title').forEach(function (t) {
+      var busy = false;
+      t.addEventListener('mouseenter', function () {
+        if (busy) return;
+        var tl = gsap.timeline({ onComplete: function () { busy = false; } });
+        busy = true;
+        if (t.hasAttribute('data-scramble-title')) {
+          if (!window.ScrambleTextPlugin) { busy = false; return; }
+          $$('.sw', t).forEach(function (w, i) {
+            tl.to(w, { duration: 0.8, scrambleText: { text: w.textContent, chars: 'upperAndLowerCase', revealDelay: 0.15, speed: 0.6 } }, i * 0.12);
+          });
+          return;
+        }
+        $$('.w', t).forEach(function (w, i) {
+          tl.to(w, { yPercent: -110, duration: 0.26, ease: 'power2.in' }, i * 0.07)
+            .fromTo(w, { yPercent: 110 }, { yPercent: 0, duration: 0.6, ease: 'expo.out', immediateRender: false }, i * 0.07 + 0.26);
+        });
+      });
+    });
+  }
+
+  // Buttons lean toward the pointer and spring back when it leaves.
+  function magnetic() {
+    if (!finePointer) return;
+    $$('.hero-cta .btn, .lang-btn, .icon-btn').forEach(function (el) {
+      var cx = 0, cy = 0;
+      el.addEventListener('pointerenter', function () {
+        var r = el.getBoundingClientRect();
+        cx = r.left + r.width / 2 - gsap.getProperty(el, 'x');
+        cy = r.top + r.height / 2 - gsap.getProperty(el, 'y');
+      });
+      el.addEventListener('pointermove', function (e) {
+        if (e.pointerType !== 'mouse') return;
+        gsap.to(el, { x: (e.clientX - cx) * 0.35, y: (e.clientY - cy) * 0.45, duration: 0.45, ease: 'power3.out', overwrite: 'auto' });
+      });
+      el.addEventListener('pointerleave', function () {
+        gsap.to(el, { x: 0, y: 0, duration: 0.9, ease: 'elastic.out(1, 0.35)', overwrite: 'auto' });
+      });
+    });
+  }
+
   /* ---------- the swell ---------- */
 
   // On a mouse: the card leans toward the pointer and rises toward the viewer,
@@ -438,6 +486,49 @@
   // Each demo plays when its card scrolls in (together with the card's own fade),
   // and again on hover. Timelines are rebuilt on every play so they always pick
   // up the current language; finish() jumps to the end state before a swap.
+  // On a mouse a card turns over when the pointer rests on it: the demo and the
+  // name in front, the description and the links behind. Touch, reduced motion
+  // and a page without scripts keep the plain card with everything showing.
+  function initFlip() {
+    if (!finePointer) return;
+    root.classList.add('flip-on');
+    $$('[data-card]').forEach(function (card) {
+      var inner = $('.card-inner', card);
+      var media = $('.media', inner);
+      var body = $('.card-body', inner);
+      var link = body && $('.stretched', body);
+      if (!media || !link) return;
+      var flip = document.createElement('div');
+      var front = document.createElement('div');
+      var back = document.createElement('div');
+      var name = document.createElement('p');
+      flip.className = 'flip';
+      front.className = 'face face-front';
+      back.className = 'face face-back';
+      name.className = 'front-name';
+      name.setAttribute('aria-hidden', 'true');
+      front.appendChild(media);
+      front.appendChild(name);
+      back.appendChild(body);
+      flip.appendChild(front);
+      flip.appendChild(back);
+      inner.appendChild(flip);
+      function syncName() { name.textContent = link.textContent.trim(); }
+      syncName();
+      document.addEventListener('bb:lang', syncName);
+
+      var timer = null;
+      function turn(on) { clearTimeout(timer); card.classList.toggle('is-flipped', on); }
+      card.addEventListener('mouseenter', function () { clearTimeout(timer); timer = setTimeout(function () { turn(true); }, 220); });
+      card.addEventListener('mouseleave', function () { turn(false); });
+      // Keyboard: the link lives on the back, so focus turns the card to it.
+      card.addEventListener('focusin', function () { turn(true); });
+      card.addEventListener('focusout', function (e) { if (!card.contains(e.relatedTarget)) turn(false); });
+      // A click before the turn finishes still opens the project.
+      front.addEventListener('click', function () { link.click(); });
+    });
+  }
+
   function demo(sel, build) {
     $$(sel).forEach(function (viz) {
       var card = viz.closest('[data-card]');
@@ -454,7 +545,8 @@
       d.hover = function () { if (!d.at || performance.now() - d.at > 4000) d.play(); };
       d.finish = function () { if (d.tl) d.tl.progress(1); };
       ScrollTrigger.create({ trigger: card, start: 'top 90%', once: true, onEnter: d.play });
-      if (finePointer) card.addEventListener('mouseenter', d.hover);
+      // A turning card shows its demo again as it comes back to the front.
+      if (finePointer) card.addEventListener(root.classList.contains('flip-on') ? 'mouseleave' : 'mouseenter', d.hover);
       demos.push(d);
     });
   }

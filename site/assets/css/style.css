@@ -584,6 +584,80 @@ button { font: inherit; color: inherit; }
   .card:active .card-inner { transform: scale(.985); transition: transform .12s; }
 }
 
+/* The turn-over (html.flip-on: a mouse and motion allowed; see initFlip in main.js).
+   The two sides carry the card's surface themselves, so the whole card turns,
+   not just its contents. Nothing that flattens 3D (opacity, overflow) sits
+   above the sides while a card is turning. */
+html.flip-on .card-inner,
+html.flip-on .card:hover .card-inner {
+  display: block;
+  border-color: transparent;
+  background: none;
+  box-shadow: none;
+  transform-style: preserve-3d;
+}
+html.flip-on .card-inner::before, html.flip-on .card-inner::after { display: none; }
+html.flip-on .grid:has(.card:hover) .card:not(:hover) .card-inner { opacity: 1; }
+html.flip-on .grid:has(.card:hover) .card:not(:hover) .face { opacity: .62; }
+
+.flip {
+  position: relative;
+  display: grid;
+  height: 100%;
+  transform-style: preserve-3d;
+  transition: transform .8s cubic-bezier(.2, .75, .15, 1);
+}
+.card.is-flipped .flip { transform: rotateY(180deg); }
+.face {
+  grid-area: 1 / 1;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  border-radius: var(--r-card);
+  border: 1px solid var(--line);
+  background: linear-gradient(180deg, #16161d, #111117);
+  box-shadow: inset 0 1px 0 rgb(255 255 255 / .05);
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  transition: border-color .35s, box-shadow .45s, opacity .35s;
+}
+.face::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity .4s;
+  background: radial-gradient(420px circle at var(--mx) var(--my), color-mix(in oklab, var(--accent) 16%, transparent), transparent 60%);
+}
+/* The back is mirrored, so its light comes from the mirrored side. */
+.face-back::before { background: radial-gradient(420px circle at calc(100% - var(--mx)) var(--my), color-mix(in oklab, var(--accent) 18%, transparent), transparent 60%); }
+.card:hover .face::before { opacity: 1; }
+.card:hover .face {
+  border-color: color-mix(in oklab, var(--accent) 45%, transparent);
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / .08),
+    0 28px 60px -22px rgb(0 0 0 / .85),
+    0 18px 70px -26px color-mix(in oklab, var(--accent) 60%, transparent);
+}
+.face-back { transform: rotateY(180deg); }
+.card:not(.is-flipped) .face-back, .card.is-flipped .face-front { pointer-events: none; }
+.face-front { cursor: pointer; }
+.face-front .media { flex: 1 0 auto; }
+.front-name {
+  padding: 4px 22px 20px;
+  font-family: var(--font-display);
+  font-size: var(--fs-xl);
+  font-weight: 500;
+  line-height: 1.2;
+  text-wrap: balance;
+}
+.face-back .card-body { padding-top: 22px; }
+.face-back .card-title { font-family: var(--font-display); font-size: var(--fs-xl); font-weight: 500; line-height: 1.2; }
+.face-back .card-title .alt-name { font-family: var(--font); }
+
 /* ================= CARD VISUALS ================= */
 /* Offline store: internet → USB → offline machine */
 .viz-flow { display: flex; justify-content: center; align-items: center; }
