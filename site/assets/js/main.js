@@ -267,9 +267,14 @@
     window.addEventListener('scroll', stale, { passive: true });
     window.addEventListener('resize', stale);
     document.addEventListener('bb:lang', function () { letters = null; });
+    // Measured again on every visit and at most once a second while moving:
+    // a measurement taken during the opening's entrance would be off by a line.
+    var measuredAt = 0;
+    section.addEventListener('pointerenter', function () { measuredAt = 0; });
     section.addEventListener('pointermove', function (e) {
       if (e.pointerType !== 'mouse') return;
-      if (!letters || !letters.length || !letters[0].c.isConnected) measure();
+      var t = performance.now();
+      if (!letters || !letters.length || !letters[0].c.isConnected || t - measuredAt > 1000) { measure(); measuredAt = t; }
       letters.forEach(function (l) {
         var k = Math.max(0, 1 - Math.hypot(e.clientX - l.x, e.clientY - l.y) / R);
         l.goal = MIN + (MAX - MIN) * k * k;
