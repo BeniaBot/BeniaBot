@@ -221,7 +221,8 @@
     };
     // On a slow connection the visitor has already waited; show the opening
     // as it is instead of making them wait through an intro as well.
-    if (performance.now() > 2500) {
+    // On a phone the opening is already showing (see the CSS), so no entrance.
+    if (!finePointer || performance.now() > 2500) {
       hero.build(false);
       gsap.set(items, { opacity: 1 });
     } else {

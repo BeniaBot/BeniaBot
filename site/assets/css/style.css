@@ -980,6 +980,12 @@ html.flip-on .grid:has(.card:hover) .card:not(:hover) .face { opacity: .62; }
 .js:not(.no-anim) [data-split-hero],
 .js:not(.no-anim) [data-hero-item],
 .js:not(.no-anim) [data-scramble-title] { opacity: 0; }
+/* On a phone the opening is there at once: it is what a phone visitor
+   waits for, and the scripts arrive last on a slow connection. */
+@media (hover: none), (pointer: coarse) {
+  .js:not(.no-anim) [data-split-hero],
+  .js:not(.no-anim) [data-hero-item] { opacity: 1; }
+}
 
 ::view-transition-old(root), ::view-transition-new(root) { animation-duration: .35s; }
 
