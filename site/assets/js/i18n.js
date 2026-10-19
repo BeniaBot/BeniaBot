@@ -43,7 +43,7 @@
     'tk.local': 'Local',
     'tk.name': 'Tik-Nick',
     'tk.desc': 'Managing and tracking forum usernames. Everything stays on your own machine.',
-    'ov.desc': 'An OpenVPN package for Windows, scripts only: tun with <span class="nw">AES-256-GCM</span> and <span class="nw">tls-crypt</span>, cleanup of the 0/1 and 128/1 routes, and failover to <span class="nw">TCP 443</span>.',
+    'ov.desc': 'OpenVPN for Windows, scripts only: tun, <span class="nw">AES-256-GCM</span>, <span class="nw">tls-crypt</span>, 0/1 and 128/1 route cleanup, failover to <span class="nw">TCP 443</span>.',
     'web.name': 'Websites & landing pages, too',
     'web.desc': 'Most are client work, so they are not here. <strong>This one is.</strong>',
 
@@ -72,7 +72,7 @@
 
     'ai.sub': 'They all talk to you. Nobody’s home.',
     'eliza.name': 'ELIZA',
-    'eliza.desc': 'In 1966 people told her their secrets, and inside there were only a few dozen rules a person wrote by hand. Rebuilt for Windows, character for character.',
+    'eliza.desc': 'In 1966 people told her secrets. Inside: a few dozen hand-written rules. Rebuilt for Windows, identical to the original.',
     'act.download': 'Download',
     'pill.eliza': 'Download ELIZA',
     'lv.params': 'parameters',
