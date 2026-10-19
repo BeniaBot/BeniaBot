@@ -14,7 +14,7 @@
     'hero.c1': 'Windows tools',
     'hero.c2': 'Websites & landing pages',
     'hero.c3': 'Hebrew-first',
-    'hero.c4': 'Offline-first',
+    'hero.c4': 'Works offline',
     'hero.quote': 'If it needs a network connection, a complicated setup, or an <span class="nw">English-only</span> interface – it’s probably not here.',
     'hero.cta': 'See the work',
 
