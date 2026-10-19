@@ -108,11 +108,16 @@
   };
 
   var META = {
-    he: { title: 'בני הבוט · BeniaBot – כלים לווינדוס, אתרים ודפי נחיתה', btn: 'EN', btnLang: 'en', btnLabel: 'Switch to English' },
-    en: { title: 'BeniaBot – Windows tools, websites and well-built jokes', btn: 'עברית', btnLang: 'he', btnLabel: 'מעבר לעברית' }
+    he: { title: 'בני הבוט · BeniaBot – כלים לווינדוס, אתרים ודפי נחיתה', btn: 'EN', btnLang: 'en', btnLabel: 'Switch to English', path: '' },
+    en: { title: 'BeniaBot – Windows tools, websites and well-built jokes', btn: 'עברית', btnLang: 'he', btnLabel: 'מעבר לעברית', path: '?lang=en',
+          desc: 'Windows tools, websites and landing pages, and cynical projects built with the same rigor. Hebrew-first, offline-first, all vibe coded.' }
   };
 
   var root = document.documentElement;
+  var canonical = document.querySelector('link[rel="canonical"]');
+  var canonicalBase = canonical ? canonical.getAttribute('href') : '';
+  var description = document.querySelector('meta[name="description"]');
+  var heDescription = description ? description.getAttribute('content') : '';
   var he = { text: new Map(), alt: new Map(), aria: new Map(), img: new Map() };
   var textEls = Array.prototype.slice.call(document.querySelectorAll('[data-i18n]'));
   var altEls = Array.prototype.slice.call(document.querySelectorAll('[data-i18n-alt]'));
@@ -149,6 +154,10 @@
 
     var m = META[lang];
     document.title = m.title;
+    // Search engines read the rendered page, so the canonical address and the
+    // description follow the language too.
+    if (canonical) canonical.setAttribute('href', canonicalBase + m.path);
+    if (description) description.setAttribute('content', m.desc || heDescription);
     document.querySelectorAll('[data-lang-toggle]').forEach(function (btn) {
       btn.setAttribute('aria-label', m.btnLabel);
       btn.setAttribute('lang', m.btnLang);
