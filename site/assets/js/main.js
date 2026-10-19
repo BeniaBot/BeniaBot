@@ -200,7 +200,10 @@
     var hero = {
       split: null,
       build: function (animate) {
-        hero.split = wordSplit(title);
+        // Letters too, so each one can answer the pointer (see heroWeight below).
+        hero.split = finePointer
+          ? SplitText.create(title, { type: 'words,chars', mask: 'words', wordsClass: 'w', charsClass: 'c' })
+          : wordSplit(title);
         gsap.set(title, { autoAlpha: 1 });
         if (animate) {
           return gsap.from(hero.split.words, { yPercent: 110, duration: 1.2, ease: 'expo.out', stagger: 0.12 });
@@ -224,6 +227,35 @@
       tl.fromTo(items, { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.9, ease: 'power3.out', stagger: 0.09 }, 0.35);
     }
     splits.push({ build: function () { hero.build(false); }, destroy: hero.destroy });
+    heroWeight(title);
+  }
+
+  // The title's letters thicken toward the pointer and thin out away from it,
+  // through the serif's weight axis. Nothing moves until the pointer is near.
+  function heroWeight(title) {
+    if (!finePointer) return;
+    var section = title.closest('.hero') || title.parentNode;
+    var REST = 560, MIN = 470, MAX = 880, R = 300;
+    var setters = new Map();
+    function setter(c) {
+      var s = setters.get(c);
+      if (!s) { s = gsap.quickTo(c, '--wght', { duration: 0.6, ease: 'power3' }); setters.set(c, s); }
+      return s;
+    }
+    function chars() { return $$('.c', title); }
+    section.addEventListener('pointermove', function (e) {
+      if (e.pointerType !== 'mouse') return;
+      chars().forEach(function (c) {
+        var r = c.getBoundingClientRect();
+        var d = Math.hypot(e.clientX - (r.left + r.width / 2), e.clientY - (r.top + r.height / 2));
+        var k = Math.max(0, 1 - d / R);
+        setter(c)(MIN + (MAX - MIN) * k * k);
+      });
+    });
+    section.addEventListener('pointerleave', function () {
+      chars().forEach(function (c) { setter(c)(REST); });
+    });
+    document.addEventListener('bb:lang', function () { setters.clear(); });
   }
 
   function reveals() {

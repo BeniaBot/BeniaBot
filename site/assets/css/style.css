@@ -306,6 +306,7 @@ button { font: inherit; color: inherit; }
 }
 [lang="en"] .hero-title { letter-spacing: -.035em; line-height: .98; }
 .hero-title .w-mask { padding-block: .08em; margin-block: -.08em; }
+.hero-title .c { font-variation-settings: 'wght' var(--wght, 560); }
 .hero-tagline {
   display: flex;
   flex-wrap: wrap;
