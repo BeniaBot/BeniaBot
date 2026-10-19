@@ -107,7 +107,7 @@
   };
 
   var META = {
-    he: { title: 'בני הבוט · BeniaBot – כלים לווינדוס, אתרים ודפי נחיתה', btn: 'EN', btnLang: 'en', btnLabel: 'Switch to English', path: '' },
+    he: { title: 'בני הבוט · BeniaBot – כלים לווינדוס, אתרים ודפי נחיתה', btn: 'EN', btnLang: 'en', btnLabel: 'EN, switch to English', path: '' },
     en: { title: 'BeniaBot – Windows tools, websites and well-built jokes', btn: 'עברית', btnLang: 'he', btnLabel: 'מעבר לעברית', path: '?lang=en',
           desc: 'Windows tools, websites and landing pages, and cynical projects built with the same rigor. Hebrew-first, offline-first, all vibe coded.' }
   };
