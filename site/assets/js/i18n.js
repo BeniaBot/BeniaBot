@@ -18,7 +18,6 @@
     'hero.quote': 'If it needs a network connection, a complicated setup, or an <span class="nw">English-only</span> interface – it’s probably not here.',
     'hero.cta': 'See the work',
 
-    'intro.eyebrow': 'Three wings',
     'intro.text': 'The real tools, the cynical wing and <bdi>AI: Absent Intelligence</bdi> are <span class="hl">kept apart on purpose</span>, so no joke misleads you about the standard of the work.',
 
     'tools.title': 'Real tools',
