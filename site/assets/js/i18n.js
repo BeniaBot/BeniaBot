@@ -26,7 +26,7 @@
     'act.code': 'Code',
     'subtext.name': 'Subtext',
     'subtext.alt': '',
-    'subtext.desc': 'A full subtitle editor for Windows. Zero installs, zero internet, proper Hebrew.',
+    'subtext.desc': 'A full subtitle editor for Windows. No install, works offline too, proper Hebrew.',
     'winapps.name': 'Offline App Store',
     'winapps.desc': 'A catalog of full installers for disconnected machines. One installer, one USB stick, done.',
     'act.catalog': 'Catalog',
