@@ -328,21 +328,32 @@ button { font: inherit; color: inherit; }
 .btn-ghost:hover { border-color: var(--text); }
 .scroll-cue {
   position: absolute;
-  bottom: 28px;
+  bottom: 30px;
   left: 50%;
-  width: 1px;
-  height: 44px;
-  background: linear-gradient(var(--line-2), transparent);
-  overflow: hidden;
+  width: 22px;
+  height: 34px;
+  margin-left: -11px;
+  border: 1.5px solid rgb(255 255 255 / .3);
+  border-radius: 12px;
 }
 .scroll-cue i {
   position: absolute;
-  inset: 0 0 auto 0;
-  height: 14px;
+  top: 7px;
+  left: 50%;
+  width: 3px;
+  height: 7px;
+  margin-left: -1.5px;
+  border-radius: 2px;
   background: var(--text);
-  animation: cue 2.2s var(--ease) infinite;
+  animation: cue 2s var(--ease) infinite;
 }
-@keyframes cue { from { transform: translateY(-14px); } to { transform: translateY(44px); } }
+@keyframes cue {
+  0% { opacity: 0; transform: translateY(0); }
+  25% { opacity: 1; }
+  70%, 100% { opacity: 0; transform: translateY(11px); }
+}
+/* A mouse is the wrong picture on a phone; there the button above says it. */
+@media (pointer: coarse) { .scroll-cue { display: none; } }
 
 /* ================= INTRO ================= */
 .intro { padding-top: var(--section); }
