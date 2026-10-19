@@ -503,7 +503,8 @@
   }
   function setCursorText() {
     var label = window.BB_I18N ? BB_I18N.t('cursor.view') : '';
-    $$('[data-card] .stretched').forEach(function (a) {
+    // The front of a turning card opens the project too, so it says so as well.
+    $$('[data-card] .stretched, [data-card] .face-front').forEach(function (a) {
       if (label) a.setAttribute('data-cursor-text', label);
     });
   }
