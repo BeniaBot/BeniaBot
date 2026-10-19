@@ -9,7 +9,8 @@ const hero = document.querySelector('.hero');
 
 // Creating the GL context can take a moment on a weak machine, so it waits
 // until the opening has started moving; the CSS gradient covers until then.
-if (canvas && hero) {
+// Not at all in Windows high-contrast mode: the CSS hides the backdrop there.
+if (canvas && hero && !window.matchMedia('(forced-colors: active)').matches) {
   const boot = () => { try { start(); } catch (err) { console.warn('background off:', err); } };
   if ('requestIdleCallback' in window) requestIdleCallback(boot, { timeout: 1200 });
   else setTimeout(boot, 300);

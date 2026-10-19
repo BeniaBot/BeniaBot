@@ -937,3 +937,13 @@ button { font: inherit; color: inherit; }
 .no-anim [data-reveal] { pointer-events: auto !important; }
 /* The language button only appears once the script that runs it has loaded. */
 html:not(.i18n-on) [data-lang-toggle] { visibility: hidden; }
+
+/* Windows high-contrast (forced colours): the system palette takes over, so the
+   moving backdrop goes away, and the decorative demos inside the cards keep
+   their own colours; without them the room dots and bars simply vanish. */
+@media (forced-colors: active) {
+  .ambient { display: none; }
+  .media { forced-color-adjust: none; }
+  /* A filled button loses its fill here; an outline keeps it a button. */
+  .btn { border: 1px solid currentColor; }
+}
