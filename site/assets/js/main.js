@@ -340,7 +340,8 @@
     api.build = function () {
       // aria 'none': the words stay real text, so a screen reader still reads the paragraph.
       api.split = SplitText.create(el, { type: 'words', wordsClass: 'w', aria: 'none' });
-      api.tween = gsap.fromTo(api.split.words, { opacity: 0.28 }, {
+      // Starts at .45, not lower: dimmer than that the waiting words fail contrast.
+      api.tween = gsap.fromTo(api.split.words, { opacity: 0.45 }, {
         opacity: 1,
         ease: 'none',
         stagger: 0.12,
