@@ -195,7 +195,13 @@
     // A soft cross-fade where the browser can do it; an instant swap elsewhere.
     var calm = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     if (document.startViewTransition && !calm) {
-      try { document.startViewTransition(function () { swap(lang); }); return; } catch (e) {}
+      try {
+        var vt = document.startViewTransition(function () { swap(lang); });
+        // A quick second click skips the running fade. The swap still happens,
+        // so the rejected promises are expected, not errors.
+        [vt.ready, vt.finished, vt.updateCallbackDone].forEach(function (p) { if (p) p.catch(function () {}); });
+        return;
+      } catch (e) {}
     }
     swap(lang);
   }
